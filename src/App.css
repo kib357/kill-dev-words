@@ -1,0 +1,60 @@
+.App {
+  height: 100vh;
+  width: 100vh;
+  margin: 0 auto;
+  position: relative;
+}
+
+.word {
+  position: absolute;
+  padding: 5px 10px;
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  top: 0;
+  transition: all 2s linear;
+  transform: translateX(-50%);
+  font-size: 1.4rem;
+}
+
+.toEnd {
+  animation-name: wordFly;
+  animation-fill-mode: both;
+  animation-timing-function: linear;
+}
+
+@keyframes wordFly {
+  0% {
+    opacity: 1;
+  }
+
+  97% {
+    background: rgba(0, 0, 0, 0.05);
+  }
+
+  98% {
+    opacity: 1;
+    background: red;
+  }
+
+  100% {
+    opacity: 0;
+    background: red;
+    left: 50%;
+    top: calc(100% - 100px - 27px);
+  }
+}
+
+.typed {
+  color: orange;
+  font-weight: bold;
+}
+
+.player {
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  background: red;
+  left: 50%;
+  bottom: 0;
+  transform: translateX(-50%);
+}
