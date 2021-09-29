@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./App.css";
 import Game, { GAME_STATE, IGameState } from "./Game";
-import { IWordObject } from "./Word";
 import confetti from "canvas-confetti";
 
 const shootConfetti = () => {
@@ -28,7 +27,6 @@ function App() {
   const handleKeyDown = React.useCallback(({ key, code }: KeyboardEvent) => {
     const word = game.onKeydown({ key, code });
     if (word) {
-      // console.log("hit", word);
       word.isKilled() && shootConfetti();
     } else {
       console.log("miss");
@@ -52,10 +50,6 @@ function App() {
     };
   }, []);
 
-  // useEffect(() => {
-  //   console.log("state update", state);
-  // }, [state]);
-
   useEffect(() => {
     if (state?.state === GAME_STATE.SCORE) {
       console.log("SCORE SCREEN");
@@ -66,20 +60,9 @@ function App() {
     }
   }, [state?.state]);
 
-  const [toEnd, setToEnd] = React.useState(false);
-  const sample = (arr: any[]) => {
-    const len = arr == null ? 0 : arr.length;
-    return len ? arr[Math.floor(Math.random() * len)] : undefined;
-  };
-
-  const duration = `${1 + Math.random() * 1.5}s`;
-
   return (
     <div className="App">
       <div className="words">
-        {/* {state?.words.map((word) => (
-          <Word key={"id" + String(word.id)} word={word} />
-        ))} */}
         {state?.words.map((word) => {
           const { duration } = word;
           const _word = word.getWord();
@@ -121,29 +104,6 @@ function App() {
           TIME: {(state.game_duration / 1000).toFixed(2)} sec.
         </h1>
       ) : null}
-    </div>
-  );
-}
-
-function WordComponent({ word, key }: { word: IWordObject; key: string }) {
-  const { duration } = word;
-  const _word = word.getWord();
-  const typed = _word.substr(0, word.getTyped());
-  const notTyped = _word.substr(word.getTyped());
-
-  return (
-    <div
-      key={key}
-      className={`word toEnd`}
-      style={{
-        left: word.pos,
-        transitionDuration: `${duration}ms`,
-        animationDuration: `${duration}ms`,
-        background: notTyped.length === 0 ? "green" : undefined,
-      }}
-    >
-      <span style={{ color: "orange", fontWeight: "bold" }}>{typed}</span>
-      {notTyped}
     </div>
   );
 }
