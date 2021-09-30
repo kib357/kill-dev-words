@@ -176,7 +176,7 @@ function Lib() {
     6: "chriscoyier javascript cssdevconf customers autoprefixer stackoverflow visibility headphones underscore bootstrap csstricks typescript livescript customer settings semicolon attribute parenthesis markdown compiler responsive preprocessor webdesign developer development".split(
       " "
     ),
-    authors: "gary petr anna sergey",
+    authors: "gary petr anna sergey".split(" "),
   };
   return Object.values(lib).flat();
 }
