@@ -1,19 +1,78 @@
 import React, { useEffect, useState } from "react";
 import "./App.css";
 import Game, { GAME_STATE, IGameState } from "./Game";
-import confetti from "canvas-confetti";
+import confetti, { shape } from "canvas-confetti";
+import GameScreen from "./GameScreen";
+import { IWordObject } from "./Word";
 
-const shootConfetti = () => {
+const PLAYER_OFFSET = 65;
+const shootConfetti = (word: IWordObject) => {
+  const myCanvas = document.getElementById(
+    "fireworks"
+  ) as HTMLCanvasElement | null;
+  var myConfetti = myCanvas
+    ? confetti.create(myCanvas, { resize: true })
+    : confetti;
   function randomInRange(min: number, max: number) {
     return Math.random() * (max - min) + min;
   }
+  const now = Date.now();
+  const { pos, duration, timestamp } = word;
+  const currentPos = duration - (now - timestamp);
+  const progress = 1 - (duration - currentPos) / duration;
 
-  confetti({
-    angle: randomInRange(55, 125),
-    spread: randomInRange(50, 70),
-    particleCount: randomInRange(50, 100),
-    origin: { y: 0.6 },
-  });
+  if (myCanvas) {
+    // from x: 10%, y: 100%
+    const start = {
+      x: ((myCanvas.clientWidth / 100) * pos) / myCanvas.clientWidth,
+      y: 0,
+    };
+    // to x: 50%, y: 0% - PLAYER_OFFSET
+    const end = {
+      x: 0.5,
+      y: (myCanvas.clientHeight - PLAYER_OFFSET) / myCanvas.clientHeight,
+    };
+
+    // word current position
+    const lookPos = {
+      x: start.x + (end.x - start.x) * (1 - progress),
+      y: start.y + (end.y - start.y) * (1 - progress),
+    };
+
+    const look = {
+      particleCount: 5 + Math.random() * 10,
+      spread: 220,
+      startVelocity: 10,
+      ticks: 35,
+      gravity: 0.5,
+      colors: ["#ffffff"],
+      shapes: ["square"] as shape[],
+      origin: {
+        x: lookPos.x,
+        // since they fall down, start a bit higher than random
+        y: lookPos.y,
+      },
+    };
+
+    myConfetti(look);
+  } else {
+    const look = {
+      particleCount: 10,
+      spread: 220,
+      startVelocity: 10,
+      ticks: 40,
+      gravity: 0.4,
+      colors: ["#ffffff"],
+      shapes: ["square"] as shape[],
+      origin: {
+        x: Math.random(),
+        // since they fall down, start a bit higher than random
+        y: Math.random() - 0.2,
+      },
+    };
+
+    myConfetti(look);
+  }
 };
 
 const FPS = 30;
@@ -27,7 +86,7 @@ function App() {
   const handleKeyDown = React.useCallback(({ key, code }: KeyboardEvent) => {
     const word = game.onKeydown({ key, code });
     if (word) {
-      word.isKilled() && shootConfetti();
+      word.isKilled() && shootConfetti(word);
     } else {
       console.log("miss");
     }
@@ -62,7 +121,8 @@ function App() {
 
   return (
     <div className="App">
-      <div className="words">
+      <GameScreen state={state} />
+      {/* <div className="words">
         {state?.words.map((word) => {
           const { duration } = word;
           const _word = word.getWord();
@@ -77,6 +137,8 @@ function App() {
                 left: word.pos + "%",
                 transitionDuration: `${duration}ms`,
                 animationDuration: `${duration}ms`,
+                animationTimingFunction: "steps(100, end)",
+                transitionTimingFunction: "steps(100, end)",
                 background: notTyped.length === 0 ? "green" : undefined,
               }}
             >
@@ -88,27 +150,13 @@ function App() {
           );
         })}
       </div>
-      <div className="player"></div>
-      {state?.state === GAME_STATE.SCORE && state?.score ? (
-        <h1
-          style={{
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            textAlign: "center",
-            transform: "translate(-50%, -50%)",
-          }}
-        >
-          SCORE: {state.score}
-          <br />
-          TIME: {(state.game_duration / 1000).toFixed(2)} sec.
-        </h1>
-      ) : null}
+      <div className="player"></div> */}
     </div>
   );
 }
 
 function Lib() {
+  // TODO добавить смешные слова, слова мемы программистов
   var lib = {
     1: "nil lib go pen var if add zsh run php bug fix api key add all id em erb rem px ux ui svg for box git xml rtc pre rgb hsl rel web js def moz end to dev css".split(
       " "

@@ -1,19 +1,52 @@
 .App {
   height: 100vh;
-  width: 100vh;
-  margin: 0 auto;
+  width: 100vw;
   position: relative;
 }
 
 .word {
   position: absolute;
-  padding: 5px 10px;
-  background: rgba(0, 0, 0, 0.1);
+  padding: 5px 5px;
+  background: white;
+  color: black;
   border-radius: 5px;
   top: 0;
   transition: all 2s linear;
   transform: translateX(-50%);
   font-size: 1.4rem;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.word span {
+  margin-top: -5px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  margin-bottom: -5px;
+  display: inline-block;
+}
+
+.word .cursor {
+  background: black;
+  color: white;
+  margin-top: -5px;
+  margin-bottom: -5px;
+  animation: cursor 700ms infinite;
+  animation-timing-function: steps(1);
+  animation-fill-mode: both;
+}
+
+@keyframes cursor {
+  0%,
+  100% {
+    background: black;
+    color: white;
+  }
+
+  50% {
+    background: white;
+    color: black;
+  }
 }
 
 .toEnd {
@@ -28,7 +61,7 @@
   }
 
   97% {
-    background: rgba(0, 0, 0, 0.05);
+    background: white;
   }
 
   98% {
@@ -40,21 +73,108 @@
     opacity: 0;
     background: red;
     left: 50%;
-    top: calc(100% - 100px - 27px);
+    top: calc(100% - 65px);
   }
-}
-
-.typed {
-  color: orange;
-  font-weight: bold;
 }
 
 .player {
   position: absolute;
-  width: 100px;
-  height: 100px;
-  background: red;
+  width: calc(131px / 2);
+  height: calc(75px / 2);
+  background: url("./player.png") no-repeat;
+  background-size: 100%;
   left: 50%;
   bottom: 0;
   transform: translateX(-50%);
+}
+
+/* GAMESCREEN */
+
+.game {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: black;
+  display: flex;
+}
+
+.game .deadline,
+.game .sidebar {
+  flex: 1 1;
+}
+
+.game .deadline,
+.game .sidebar .score {
+  font-size: 32px;
+  line-height: 1;
+}
+
+.outlined {
+  text-shadow: 0 1px 1px white, 0 -1px 1px white, 1px 0 1px white,
+    -1px 0 1px white;
+  color: black;
+}
+
+.outlined_inverted {
+  text-shadow: 0 1px 1px black, 0 -1px 1px black, 1px 0 1px black,
+    -1px 0 1px black;
+  color: white;
+}
+
+.game .deadline {
+  padding-left: 36px;
+  padding-top: 36px;
+  /* color: black; */
+}
+
+.game .sidebar {
+  padding-top: 36px;
+  padding-right: 36px;
+  position: relative;
+}
+
+.game .sidebar .score {
+  text-align: right;
+}
+
+.game .typed-char {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 400px;
+}
+
+.game .container {
+  width: 100vh;
+  position: relative;
+}
+
+.game .desktop {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%);
+  width: 171%;
+  height: 100%;
+  background: url("./desktop-mini.png") no-repeat;
+  background-size: 100%;
+}
+
+.game .logo {
+  width: calc(364px / 2);
+  height: calc(88px / 2);
+  background: url("./logo.png") no-repeat;
+  background-size: 100%;
+  margin: 36px auto 0;
+}
+
+.game .viewport {
+  position: absolute;
+  top: 230px;
+  left: 83px;
+  right: 82px;
+  bottom: 335px;
 }
