@@ -5,14 +5,17 @@ import { keyframes } from "@emotion/react";
 import { css } from "@emotion/css";
 import DesktopMiniSrc from "./desktop-mini.png";
 
+type IOnLeaderboard = { id: number; deadline: string };
+
 function GameScreen(props: {
   state: IGameState | null;
   tickId: number;
   duration: number;
   FPS: number;
+  onLeaderboard: (props: IOnLeaderboard) => void;
 }) {
   const [isScoreScreen, setScoreScreen] = React.useState(false);
-  const { state, tickId, duration, FPS } = props;
+  const { state, tickId, duration, FPS, onLeaderboard } = props;
   const Words = React.useMemo(
     () =>
       state?.words.map((word) => {
@@ -98,12 +101,25 @@ function GameScreen(props: {
   }, []);
 
   useEffect(() => {
-    let timeoutId;
+    let timeoutId: NodeJS.Timeout;
+    let timeoutLeaderboardId: NodeJS.Timeout;
     if (state?.state === GAME_STATE.SCORE) {
       timeoutId = setTimeout(() => {
         setScoreScreen(true);
+
+        timeoutLeaderboardId = setTimeout(() => {
+          onLeaderboard({
+            id: 1,
+            deadline: deadlineValue,
+          });
+        }, 1500);
       }, 3000);
     }
+
+    return () => {
+      clearTimeout(timeoutId);
+      clearTimeout(timeoutLeaderboardId);
+    };
   }, [state?.state]);
 
   return (
@@ -122,10 +138,18 @@ function GameScreen(props: {
             )}px,0)`,
           }}
         >
-          <span className="outlined">DEADLINE</span>
-          <span className="countdown" style={{ marginLeft: "0.2em" }}>
-            &nbsp;{deadlineValue}
-          </span>
+          <div className="label">
+            <span className="outlined">DEADLINE</span>
+            <span className="countdown" style={{ marginLeft: "0.2em" }}>
+              &nbsp;{deadlineValue}
+            </span>
+          </div>
+          <div className="score-in-deadline">
+            <span className="outlined">SCORE</span>
+            <span style={{ marginLeft: "1.9em" }}>
+              {formatScore(state?.score || 0)}
+            </span>
+          </div>
         </div>
       </div>
       <div className="container">
@@ -175,8 +199,10 @@ function GameScreen(props: {
 interface IScore {
   value?: number;
 }
+function formatScore(n: number) {
+  return numberWithSpaces(Math.floor(n));
+}
 const Score: React.FC<IScore> = React.memo(({ value = 0 }) => {
-  const format = (n: number) => numberWithSpaces(Math.floor(n));
   return (
     <NumberEasing
       decimals={0}
@@ -184,7 +210,7 @@ const Score: React.FC<IScore> = React.memo(({ value = 0 }) => {
       key="score"
       ease="cubicIn"
       value={value}
-      customFunctionRender={format}
+      customFunctionRender={formatScore}
     />
   );
 });

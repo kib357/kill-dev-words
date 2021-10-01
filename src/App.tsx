@@ -5,6 +5,7 @@ import confetti, { shape } from "canvas-confetti";
 import GameScreen from "./GameScreen";
 import { IWordObject } from "./Word";
 import DesktopMiniSrc from "./desktop-mini.png";
+import Leaderboard from "./Leaderboard";
 
 const PLAYER_OFFSET = 65;
 const shootConfetti = (word: IWordObject) => {
@@ -84,6 +85,10 @@ const WORDS = Lib();
 const DURATION = 1000;
 
 function App() {
+  const [leaderboard, setLeaderboard] = useState<null | {
+    id: number;
+    deadline: string;
+  }>(null);
   const [gameLoopId, setGameLoopId] = useState<NodeJS.Timeout | null>(null);
   const [tickId, setTickId] = useState(0);
   const [state, setState] = useState<IGameState | null>(null);
@@ -141,9 +146,23 @@ function App() {
     };
   }, []);
 
+  const handleLeaderboard = (props: { id: number; deadline: string }) => {
+    setLeaderboard(props);
+  };
+
   return (
     <div className="App">
-      <GameScreen FPS={FPS} duration={DURATION} tickId={tickId} state={state} />
+      {leaderboard ? (
+        <Leaderboard {...leaderboard} />
+      ) : (
+        <GameScreen
+          FPS={FPS}
+          duration={DURATION}
+          tickId={tickId}
+          state={state}
+          onLeaderboard={handleLeaderboard}
+        />
+      )}
       {/* <div className="words">
         {state?.words.map((word) => {
           const { duration } = word;
