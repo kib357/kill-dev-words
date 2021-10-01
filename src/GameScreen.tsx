@@ -1,6 +1,8 @@
 import React from "react";
 import { IGameState } from "./Game";
 import NumberEasing from "react-number-easing";
+import { keyframes } from "@emotion/react";
+import { css } from "@emotion/css";
 
 function GameScreen(props: { state: IGameState | null }) {
   const { state } = props;
@@ -40,6 +42,11 @@ function GameScreen(props: { state: IGameState | null }) {
       }),
     [state?.words || []]
   );
+  const particles = state?.getParticles() || [];
+  const Particles = React.useMemo(
+    () => particles.map((particle) => <Particle {...particle} />),
+    [particles || []]
+  );
 
   return (
     <div className="game">
@@ -51,7 +58,9 @@ function GameScreen(props: { state: IGameState | null }) {
         <div className="logo"></div>
         <div className="viewport">
           <div className="words">{Words}</div>
-          <div className="particles"></div>
+          <div className="particles" id="particles">
+            {Particles}
+          </div>
           <canvas
             style={{ width: "100%", height: "100%" }}
             id="fireworks"
@@ -99,6 +108,58 @@ const Score: React.FC<IScore> = React.memo(({ value = 0 }) => {
 
 function numberWithSpaces(x: number) {
   return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+}
+
+interface IParticle {
+  destination: { x: number; y: number };
+  duration: number;
+  key: string;
+}
+function Particle({ destination, duration, key }: IParticle) {
+  const container = document.getElementById("particles");
+  const { offsetHeight: containerHeight, offsetWidth: containerWidth } =
+    container || {
+      offsetHeight: 1,
+      offsetWidth: 1,
+    };
+  const x = map(destination.x, 0, 1, -containerWidth / 2, containerWidth / 2);
+  const y = map(destination.y, 0, 1, -containerHeight, 0);
+
+  const bounce = keyframes`
+  from, {
+    transform: translate3d(0, 0, 0);
+  }
+
+  to {
+    transform: translate3d(${x}px, ${y}px,0);
+  }
+`;
+
+  return (
+    <div
+      key={key}
+      className={css({
+        animation: `${bounce} ${duration}ms ease infinite`,
+        position: "absolute",
+        bottom: "calc(45px - (9px / 2))",
+        left: "calc(50% - (9px / 2))",
+        transform: "translate(0, 0)",
+        width: "9px",
+        height: "9px",
+        background: "white",
+        animationTimingFunction: `steps(${Math.floor(duration / 30)}, end)`,
+      })}
+    ></div>
+  );
+}
+function map(
+  value: number,
+  low1: number,
+  high1: number,
+  low2: number,
+  high2: number
+) {
+  return low2 + ((high2 - low2) * (value - low1)) / (high1 - low1);
 }
 
 export default GameScreen;

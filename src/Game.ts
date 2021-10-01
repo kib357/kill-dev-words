@@ -3,6 +3,15 @@ import Word, { IWord, IWordObject } from "./Word";
 interface IGame {
   duration?: number;
   WORDS?: string[];
+  PLAYER_OFFSET: number;
+}
+export type IDestination = { x: number; y: number };
+
+export interface IParticle {
+  duration: number;
+  destination: IDestination;
+  key: string;
+  timestamp: number;
 }
 
 export interface IGameState {
@@ -10,6 +19,7 @@ export interface IGameState {
   score: number;
   game_duration: number;
   words: IWordObject[];
+  getParticles: () => IParticle[];
   current?: IWordObject;
 }
 
@@ -18,7 +28,7 @@ export enum GAME_STATE {
   SCORE,
 }
 
-function Game({ duration = 30 * 1000, WORDS = [] }: IGame) {
+function Game({ duration = 30 * 1000, WORDS = [], PLAYER_OFFSET }: IGame) {
   const start_timestamp = Date.now();
   let game_duration = 0;
   let state: GAME_STATE = GAME_STATE.PLAY;
@@ -34,6 +44,8 @@ function Game({ duration = 30 * 1000, WORDS = [] }: IGame) {
     _score += scoreUp * 123; // TODO рефакторинг двух видов счета (внутренний=100 и внешний = 123 * длинна слова)
     score += 100;
   };
+
+  let particles: IParticle[] = [];
 
   let words: IWordObject[] = [];
   let wordSpawnTimeout = 0;
@@ -74,6 +86,64 @@ function Game({ duration = 30 * 1000, WORDS = [] }: IGame) {
 
   const getDuration = () => Date.now() - start_timestamp;
 
+  // PARTICLES
+  // TODO TESTS
+  const shootParticle = (word: IWordObject) => {
+    const PARTICLE_DURATION = 180;
+    const particlesContainer = document.getElementById(
+      "particles"
+    ) as HTMLElement | null;
+    const { clientWidth = 0, clientHeight = 0 } = particlesContainer || {};
+    const now = Date.now();
+    const { pos, duration, timestamp } = word;
+    const currentPos = duration - (now - timestamp + PARTICLE_DURATION);
+    const progress = 1 - (duration - currentPos) / duration;
+
+    // from x: 10%, y: 100%
+    const start = {
+      x: pos / 100,
+      y: 0,
+    };
+    // to x: 50%, y: 0% - PLAYER_OFFSET
+    const end = {
+      x: 0.5,
+      y: (clientHeight - PLAYER_OFFSET) / clientHeight,
+    };
+
+    // word current position
+    const destinationPos = {
+      x: start.x + (end.x - start.x) * (1 - progress),
+      y: start.y + (end.y - start.y) * (1 - progress),
+    };
+
+    const particle = {
+      timestamp: Date.now(),
+      key: String(Math.random() * 10000),
+      destination: destinationPos,
+      duration: PARTICLE_DURATION,
+    };
+    particles = [...particles, particle];
+  };
+  const getParticles = () => particles;
+
+  //  TODO TESTS
+  const cleanParticles = () => {
+    let isFiltered = false;
+    const now = Date.now(); // TODO refactor to global now value
+    const filtered = particles.filter(({ timestamp, duration }) => {
+      if (timestamp + duration < now) {
+        isFiltered = true;
+        return false;
+      }
+
+      return true;
+    });
+
+    if (isFiltered) {
+      particles = filtered;
+    }
+  };
+
   return {
     onKeydown: (e: { key: string; code: string }) => {
       const prepareCode = (code: string) =>
@@ -85,11 +155,13 @@ function Game({ duration = 30 * 1000, WORDS = [] }: IGame) {
         const isCorrect = word[typedWord?.getTyped()] === char;
         if (isCorrect) {
           typedWord.setTyped();
+          shootParticle(typedWord);
           return typedWord;
         }
       } else {
         const newTyped = findClosestWord(words, char);
         newTyped?.setTyped();
+        newTyped && shootParticle(newTyped);
         return newTyped;
       }
 
@@ -101,6 +173,7 @@ function Game({ duration = 30 * 1000, WORDS = [] }: IGame) {
         score: _score,
         game_duration,
         words,
+        getParticles,
         current: getTypedWord(words),
       };
     },
@@ -115,6 +188,8 @@ function Game({ duration = 30 * 1000, WORDS = [] }: IGame) {
         words = killWords(words);
         spawnWord();
       }
+
+      cleanParticles();
     },
   };
 }
@@ -124,7 +199,7 @@ export function getTypedWord(words: IWordObject[]) {
 }
 
 export function generateSpawnTimeout() {
-  // TODO use level
+  // TODO:GAMEPLAY use level
   const now = Date.now();
   const timeout = Math.floor(2000 + Math.random() * 2000);
   return now + timeout;

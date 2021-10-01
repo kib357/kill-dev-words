@@ -152,6 +152,26 @@
   position: relative;
 }
 
+.game .particles {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.game .particles .particle {
+  position: absolute;
+  bottom: calc(45px - (9px / 2));
+  left: calc(50% - (9px / 2));
+  transform: translate(0, 0);
+  width: 9px;
+  height: 9px;
+  background: white;
+  transition-property: transform;
+  transition-timing-function: steps(10, end);
+}
+
 .game .desktop {
   position: absolute;
   top: 0;

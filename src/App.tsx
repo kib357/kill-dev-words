@@ -24,7 +24,7 @@ const shootConfetti = (word: IWordObject) => {
   if (myCanvas) {
     // from x: 10%, y: 100%
     const start = {
-      x: ((myCanvas.clientWidth / 100) * pos) / myCanvas.clientWidth,
+      x: pos / 100,
       y: 0,
     };
     // to x: 50%, y: 0% - PLAYER_OFFSET
@@ -82,7 +82,7 @@ const WORDS = Lib();
 function App() {
   const [gameLoopId, setGameLoopId] = useState<NodeJS.Timeout | null>(null);
   const [state, setState] = useState<IGameState | null>(null);
-  const game = React.useMemo(() => Game({ WORDS }), []);
+  const game = React.useMemo(() => Game({ WORDS, PLAYER_OFFSET }), []);
   const handleKeyDown = React.useCallback(({ key, code }: KeyboardEvent) => {
     const word = game.onKeydown({ key, code });
     if (word) {

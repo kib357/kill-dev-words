@@ -2,7 +2,6 @@
 
 ### TODO
 
-- add particle on correct char (styled-components? animation lib?)
 - support deadline timer
 - score screen layout
 - - save game result to leaderboard (localstorage)
