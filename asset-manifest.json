@@ -1,6 +1,6 @@
 {
   "files": {
-    "main.css": "/kill-dev-words/static/css/main.a5fc17d5.chunk.css",
+    "main.css": "/kill-dev-words/static/css/main.f44613b6.chunk.css",
     "main.js": "/kill-dev-words/static/js/main.e3691983.chunk.js",
     "main.js.map": "/kill-dev-words/static/js/main.e3691983.chunk.js.map",
     "runtime-main.js": "/kill-dev-words/static/js/runtime-main.bdad17e0.js",
@@ -8,14 +8,14 @@
     "static/js/2.4d4a0aa6.chunk.js": "/kill-dev-words/static/js/2.4d4a0aa6.chunk.js",
     "static/js/2.4d4a0aa6.chunk.js.map": "/kill-dev-words/static/js/2.4d4a0aa6.chunk.js.map",
     "index.html": "/kill-dev-words/index.html",
-    "static/css/main.a5fc17d5.chunk.css.map": "/kill-dev-words/static/css/main.a5fc17d5.chunk.css.map",
+    "static/css/main.f44613b6.chunk.css.map": "/kill-dev-words/static/css/main.f44613b6.chunk.css.map",
     "static/js/2.4d4a0aa6.chunk.js.LICENSE.txt": "/kill-dev-words/static/js/2.4d4a0aa6.chunk.js.LICENSE.txt",
     "static/media/App.css": "/kill-dev-words/static/media/desktop-mini.6f7d810a.png"
   },
   "entrypoints": [
     "static/js/runtime-main.bdad17e0.js",
     "static/js/2.4d4a0aa6.chunk.js",
-    "static/css/main.a5fc17d5.chunk.css",
+    "static/css/main.f44613b6.chunk.css",
     "static/js/main.e3691983.chunk.js"
   ]
 }
