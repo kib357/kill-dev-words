@@ -90,15 +90,17 @@ test("Game should kill words", () => {
 });
 
 test("Game should increase score after word was killed", () => {
-  const isScore = countScore([
+  const word = "aaa";
+  const { score: isScore, killed } = countScore([
     generateWord(),
-    generateWord({ typed: 3, word: "aaa" }),
+    generateWord({ typed: 3, word }),
   ]);
   expect(isScore).toBeTruthy();
+  expect(killed?.getWord()).toEqual(word);
 });
 
 test("Game should not increase score if word not killed", () => {
-  const isScore = countScore([
+  const { score: isScore } = countScore([
     generateWord(),
     generateWord({ typed: 2, word: "aaa" }),
   ]);
@@ -154,8 +156,8 @@ test("Game should end after the specified time", () => {
 test("Game should return statistics", () => {
   const game = Game({ WORDS: ["a"] });
   game.tick(); // spawn word
-  game.onKeydown({ char: "a" });
+  game.onKeydown({ code: "KeyA", key: "a" });
   game.tick(); // count score
   const state = game.getState();
-  expect(state.score).toBe(100);
+  expect(state.score).toBe(123);
 });

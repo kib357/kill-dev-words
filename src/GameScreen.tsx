@@ -65,7 +65,7 @@ function GameScreen(props: { state: IGameState | null }) {
           <span
             style={{
               marginLeft: "0.2em",
-              minWidth: "3em",
+              minWidth: "4em",
               display: "inline-block",
             }}
           >

@@ -28,7 +28,12 @@ function Game({ duration = 30 * 1000, WORDS = [] }: IGame) {
   };
 
   let score = 0;
-  const addScore = () => (score += 100);
+  let _score = 0;
+  const addScore = (word: IWordObject) => {
+    const scoreUp = word.getWord().length;
+    _score += scoreUp * 123; // TODO рефакторинг двух видов счета (внутренний=100 и внешний = 123 * длинна слова)
+    score += 100;
+  };
 
   let words: IWordObject[] = [];
   let wordSpawnTimeout = 0;
@@ -93,15 +98,15 @@ function Game({ duration = 30 * 1000, WORDS = [] }: IGame) {
     getState: (): IGameState => {
       return {
         state,
-        score,
+        score: _score,
         game_duration,
         words,
         current: getTypedWord(words),
       };
     },
     tick: () => {
-      const score = countScore(words);
-      if (score) addScore();
+      const { score, killed } = countScore(words);
+      if (score && killed) addScore(killed);
 
       const collision = detectWordCollision(words);
       if (collision || getTimeIsUp()) {
@@ -157,8 +162,12 @@ export function killWords(words: IWordObject[]): IWordObject[] {
   return words.filter((word) => !isKilled(word));
 }
 
-export function countScore(words: IWordObject[]): boolean {
-  return Boolean(words.find(isKilled));
+export function countScore(words: IWordObject[]): {
+  score: boolean;
+  killed: IWordObject | undefined;
+} {
+  const killed = words.find(isKilled);
+  return { score: Boolean(killed), killed };
 }
 
 export function detectWordCollision(words: IWordObject[]): boolean {

@@ -1,5 +1,18 @@
 # kill-dev-words
 
+### TODO
+
+- add particle on correct char (styled-components? animation lib?)
+- support deadline timer
+- score screen layout
+- - save game result to leaderboard (localstorage)
+- main screen layout
+- register and howto screens layout
+- add animation on key press
+- add start game countdown (3 - 2 - 1)
+- support noisy banners gameplay
+- leaderboard screen layout with controls (up, down)
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
