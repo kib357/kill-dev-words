@@ -4,6 +4,42 @@ import NumberEasing from "react-number-easing";
 
 function GameScreen(props: { state: IGameState | null }) {
   const { state } = props;
+  const Words = React.useMemo(
+    () =>
+      state?.words.map((word) => {
+        const { duration } = word;
+        const _word = word.getWord();
+        const typed = _word.substr(0, word.getTyped());
+        const cursor = typed ? _word.substr(word.getTyped(), 1) : null;
+        const notTyped = _word.substr(
+          typed ? word.getTyped() + 1 : word.getTyped()
+        );
+
+        // duration min 500 max 10000
+        // 6000 - 60
+        const steps = Math.floor(duration / 110);
+
+        return (
+          <div
+            key={word.id}
+            className={`word toEnd eightBit`}
+            style={{
+              left: word.pos + "%",
+              transitionDuration: `${duration}ms`,
+              animationDuration: `${duration}ms`,
+              animationTimingFunction: `steps(${steps}, end)`,
+              transitionTimingFunction: `steps(${steps}, end)`,
+            }}
+          >
+            <span className="outlined_inverted">{typed}</span>
+            {cursor ? <span className="cursor">{cursor}</span> : null}
+            <span>{notTyped}</span>
+          </div>
+        );
+      }),
+    [state?.words || []]
+  );
+
   return (
     <div className="game">
       <div className="deadline">
@@ -13,39 +49,7 @@ function GameScreen(props: { state: IGameState | null }) {
       <div className="container">
         <div className="logo"></div>
         <div className="viewport">
-          <div className="words">
-            {state?.words.map((word) => {
-              const { duration } = word;
-              const _word = word.getWord();
-              const typed = _word.substr(0, word.getTyped());
-              const cursor = typed ? _word.substr(word.getTyped(), 1) : null;
-              const notTyped = _word.substr(
-                typed ? word.getTyped() + 1 : word.getTyped()
-              );
-
-              // duration min 500 max 10000
-              // 6000 - 60
-              const steps = Math.floor(duration / 110);
-
-              return (
-                <div
-                  key={word.id}
-                  className={`word toEnd eightBit`}
-                  style={{
-                    left: word.pos + "%",
-                    transitionDuration: `${duration}ms`,
-                    animationDuration: `${duration}ms`,
-                    animationTimingFunction: `steps(${steps}, end)`,
-                    transitionTimingFunction: `steps(${steps}, end)`,
-                  }}
-                >
-                  <span className="outlined_inverted">{typed}</span>
-                  {cursor ? <span className="cursor">{cursor}</span> : null}
-                  <span>{notTyped}</span>
-                </div>
-              );
-            })}
-          </div>
+          <div className="words">{Words}</div>
           <div className="particles"></div>
           <canvas
             style={{ width: "100%", height: "100%" }}

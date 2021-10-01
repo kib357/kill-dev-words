@@ -71,7 +71,9 @@ function Game({ duration = 30 * 1000, WORDS = [] }: IGame) {
 
   return {
     onKeydown: (e: { key: string; code: string }) => {
-      const char = e.key;
+      const prepareCode = (code: string) =>
+        code.toLowerCase().replace("key", "");
+      const char = prepareCode(e.code);
       const typedWord = getTypedWord(words);
       if (typedWord) {
         const word = typedWord.getWord();
