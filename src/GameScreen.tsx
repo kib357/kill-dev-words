@@ -1,11 +1,17 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { IGameState } from "./Game";
 import NumberEasing from "react-number-easing";
 import { keyframes } from "@emotion/react";
 import { css } from "@emotion/css";
+import DesktopMiniSrc from "./desktop-mini.png";
 
-function GameScreen(props: { state: IGameState | null }) {
-  const { state } = props;
+function GameScreen(props: {
+  state: IGameState | null;
+  tickId: number;
+  duration: number;
+  FPS: number;
+}) {
+  const { state, tickId, duration, FPS } = props;
   const Words = React.useMemo(
     () =>
       state?.words.map((word) => {
@@ -48,11 +54,59 @@ function GameScreen(props: { state: IGameState | null }) {
     [particles || []]
   );
 
+  const { start_timestamp = 0 } = state || {};
+  const [deadlineValue, dealdlinePos] = getDeadline({
+    start_timestamp,
+    duration,
+    tickId,
+  });
+
+  useEffect(() => {
+    const dpr = window.devicePixelRatio || 1;
+    const background = document.getElementById("desktop") as HTMLCanvasElement;
+    background.width = background.clientWidth * dpr;
+    background.height = background.clientHeight * dpr;
+    const context = background.getContext("2d");
+
+    const image = new Image();
+    image.src = DesktopMiniSrc;
+    image.onload = () => {
+      if (!context) return;
+
+      context.scale(dpr, dpr);
+
+      const multiplier = 1.15;
+      const width = image.width * multiplier;
+      const height = image.height * multiplier;
+      context.drawImage(
+        image,
+        Math.floor((background.width - width) / 2),
+        100 + Math.floor((background.height - height) / 2),
+        width,
+        height
+      );
+    };
+  }, []);
+
   return (
     <div className="game">
       <div className="deadline">
-        <span className="outlined">DEADLINE</span>
-        <span style={{ marginLeft: "0.2em" }}>&nbsp;1:59</span>
+        <div
+          className="deadline-container"
+          style={{
+            position: "absolute",
+            top: "36px",
+            left: "36px",
+            willChange: "transform",
+            transition: `transform ${Math.floor(1000 / FPS)}ms`,
+            transform: `translate3d(0,${Math.floor(
+              map(dealdlinePos, 0, 1, 0, 978)
+            )}px,0)`,
+          }}
+        >
+          <span className="outlined">DEADLINE</span>
+          <span style={{ marginLeft: "0.2em" }}>&nbsp;{deadlineValue}</span>
+        </div>
       </div>
       <div className="container">
         <div className="logo"></div>
@@ -67,7 +121,7 @@ function GameScreen(props: { state: IGameState | null }) {
           ></canvas>
           <div className="player"></div>
         </div>
-        <div className="desktop"></div>
+        <canvas id="desktop" className="desktop" />
       </div>
       <div className="sidebar">
         <div className="score">
@@ -160,6 +214,45 @@ function map(
   high2: number
 ) {
   return low2 + ((high2 - low2) * (value - low1)) / (high1 - low1);
+}
+
+function getDeadline({
+  start_timestamp,
+  duration,
+  tickId,
+}: {
+  start_timestamp: number;
+  duration: number;
+  tickId: number;
+}): [string, number] {
+  const progress = tickId - start_timestamp;
+  const time = convertMS(Math.max(duration - progress, 0));
+  const deadlineValue = `${padNumber(time.minute)}:${padNumber(time.seconds)}`,
+    // 0 -> 1
+    dealdlinePos = Math.min(progress, duration) / duration;
+
+  return [deadlineValue, dealdlinePos];
+}
+
+function padNumber(n: number) {
+  return String(n).padStart(2, "0");
+}
+
+function convertMS(milliseconds: number) {
+  var day, hour, minute, seconds;
+  seconds = Math.floor(milliseconds / 1000);
+  minute = Math.floor(seconds / 60);
+  seconds = seconds % 60;
+  hour = Math.floor(minute / 60);
+  minute = minute % 60;
+  day = Math.floor(hour / 24);
+  hour = hour % 24;
+  return {
+    day: day,
+    hour: hour,
+    minute: minute,
+    seconds: seconds,
+  };
 }
 
 export default GameScreen;

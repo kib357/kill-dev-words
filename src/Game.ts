@@ -21,6 +21,7 @@ export interface IGameState {
   words: IWordObject[];
   getParticles: () => IParticle[];
   current?: IWordObject;
+  start_timestamp: number;
 }
 
 export enum GAME_STATE {
@@ -51,7 +52,7 @@ function Game({ duration = 30 * 1000, WORDS = [], PLAYER_OFFSET }: IGame) {
   let wordSpawnTimeout = 0;
   const getRandomDuration = (word: string) => {
     const duration = Math.floor(
-      3000 + word.length * (500 + Math.random() * 500)
+      3800 + word.length * (1200 + Math.random() * 600)
     );
     const levelMultiplier = score >= 200 ? 1 / (score / 200) : 1;
 
@@ -174,6 +175,7 @@ function Game({ duration = 30 * 1000, WORDS = [], PLAYER_OFFSET }: IGame) {
         game_duration,
         words,
         getParticles,
+        start_timestamp,
         current: getTypedWord(words),
       };
     },

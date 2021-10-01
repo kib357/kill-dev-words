@@ -4,6 +4,7 @@ import Game, { GAME_STATE, IGameState } from "./Game";
 import confetti, { shape } from "canvas-confetti";
 import GameScreen from "./GameScreen";
 import { IWordObject } from "./Word";
+import DesktopMiniSrc from "./desktop-mini.png";
 
 const PLAYER_OFFSET = 65;
 const shootConfetti = (word: IWordObject) => {
@@ -79,10 +80,16 @@ const FPS = 30;
 
 const WORDS = Lib();
 
+const DURATION = 30 * 1000;
+
 function App() {
   const [gameLoopId, setGameLoopId] = useState<NodeJS.Timeout | null>(null);
+  const [tickId, setTickId] = useState(0);
   const [state, setState] = useState<IGameState | null>(null);
-  const game = React.useMemo(() => Game({ WORDS, PLAYER_OFFSET }), []);
+  const game = React.useMemo(
+    () => Game({ WORDS, PLAYER_OFFSET, duration: DURATION }),
+    []
+  );
   const handleKeyDown = React.useCallback(({ key, code }: KeyboardEvent) => {
     const word = game.onKeydown({ key, code });
     if (word) {
@@ -97,6 +104,7 @@ function App() {
     const tick = () => {
       game.tick();
       setState(game.getState());
+      setTickId(Date.now());
     };
 
     tick();
@@ -119,9 +127,22 @@ function App() {
     }
   }, [state?.state]);
 
+  useEffect(() => {
+    const background = document.getElementById("desktop") as HTMLCanvasElement;
+    const context = background.getContext("2d");
+
+    const image = new Image();
+    image.src = DesktopMiniSrc;
+    image.onload = () => {
+      if (!context) return;
+
+      context.drawImage(image, background.clientWidth, background.clientHeight);
+    };
+  }, []);
+
   return (
     <div className="App">
-      <GameScreen state={state} />
+      <GameScreen FPS={FPS} duration={DURATION} tickId={tickId} state={state} />
       {/* <div className="words">
         {state?.words.map((word) => {
           const { duration } = word;
