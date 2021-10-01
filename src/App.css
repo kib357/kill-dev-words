@@ -105,6 +105,43 @@
   flex: 1 1;
 }
 
+.game.leaderboard .deadline-container,
+.game.leaderboard .desktop {
+  transition: all linear 800ms !important;
+}
+
+.game.leaderboard .deadline-container .outlined,
+.game.leaderboard .deadline-container .countdown {
+  /* transition: all 0.2s !important; */
+}
+
+.game.leaderboard .viewport,
+.game.leaderboard .logo,
+.game.leaderboard .score {
+  display: none;
+}
+
+.game.leaderboard .deadline-container {
+  transform: translate3d(0px, -2.2em, 0px) !important;
+  font-size: 154px;
+  transition-delay: 15ms !important;
+}
+
+.game.leaderboard .deadline-container .outlined {
+  color: white;
+  text-shadow: none;
+}
+
+.game.leaderboard .deadline-container .countdown {
+  text-shadow: 0 3px 3px white, 0 -3px 3px white, 3px 0 3px white,
+    -3px 0 3px white;
+  color: black;
+}
+
+.game.leaderboard .desktop {
+  transform: scale(2.8) translate3d(9%, 0, 0) !important;
+}
+
 .game .deadline,
 .game .sidebar .score {
   font-size: 32px;
@@ -180,10 +217,11 @@
   /* left: 50%; */
   /* transform: translate(-50%); */
   /* width: 171%; */
-  height: 100%;
+  height: 120%;
   /* background: url("./desktop-mini.png") no-repeat; */
   /* background-size: 100%; */
   z-index: 3;
+  transform-origin: left bottom;
 }
 
 .game .gameover {

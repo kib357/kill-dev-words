@@ -11,6 +11,7 @@ function GameScreen(props: {
   duration: number;
   FPS: number;
 }) {
+  const [isScoreScreen, setScoreScreen] = React.useState(false);
   const { state, tickId, duration, FPS } = props;
   const Words = React.useMemo(
     () =>
@@ -55,7 +56,7 @@ function GameScreen(props: {
   );
 
   const { start_timestamp = 0 } = state || {};
-  const [deadlineValue, dealdlinePos] = getDeadline({
+  const [deadlineValue, deadlinePos] = getDeadline({
     start_timestamp,
     duration,
     tickId,
@@ -79,27 +80,52 @@ function GameScreen(props: {
       const width = image.width * multiplier;
       const height = image.height * multiplier;
       context.drawImage(image, 0, 0, width, height);
+
+      // const zoomInCanvas = () => {
+      //   console.log("zoom in");
+      //   // context.clearRect(0, 0, canvas.width, canvas.height);
+      //   // const multiplier = 2;
+      //   // const width = image.width * multiplier;
+      //   // const height = image.height * multiplier;
+      //   // context.drawImage(image, 0, 0, width, height);
+      //   context.scale(20, 20);
+      // };
+
+      // setTimeout(() => {
+      //   zoomInCanvas();
+      // }, 2000);
     };
   }, []);
 
+  useEffect(() => {
+    let timeoutId;
+    if (state?.state === GAME_STATE.SCORE) {
+      timeoutId = setTimeout(() => {
+        setScoreScreen(true);
+      }, 3000);
+    }
+  }, [state?.state]);
+
   return (
-    <div className="game">
+    <div className={`game ${isScoreScreen ? "leaderboard" : null}`}>
       <div className="deadline">
         <div
           className="deadline-container"
           style={{
             position: "absolute",
-            top: "36px",
+            bottom: "36px",
             left: "36px",
             willChange: "transform",
             transition: `transform ${Math.floor(1000 / FPS)}ms`,
             transform: `translate3d(0,${Math.floor(
-              map(dealdlinePos, 0, 1, 0, 978)
+              map(deadlinePos, 0, 1, -978, 0)
             )}px,0)`,
           }}
         >
           <span className="outlined">DEADLINE</span>
-          <span style={{ marginLeft: "0.2em" }}>&nbsp;{deadlineValue}</span>
+          <span className="countdown" style={{ marginLeft: "0.2em" }}>
+            &nbsp;{deadlineValue}
+          </span>
         </div>
       </div>
       <div className="container">
