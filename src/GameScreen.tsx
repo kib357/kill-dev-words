@@ -170,7 +170,7 @@ const Score: React.FC<IScore> = React.memo(({ value = 0 }) => {
 });
 
 function numberWithSpaces(x: number) {
-  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
 interface IParticle {
