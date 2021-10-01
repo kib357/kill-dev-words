@@ -24,6 +24,7 @@ function GameScreen(props: { state: IGameState | null }) {
             key={word.id}
             className={`word toEnd eightBit`}
             style={{
+              zIndex: cursor ? 2 : 1,
               left: word.pos + "%",
               transitionDuration: `${duration}ms`,
               animationDuration: `${duration}ms`,
