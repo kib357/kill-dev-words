@@ -97,13 +97,22 @@ function App() {
     []
   );
   const handleKeyDown = React.useCallback(({ key, code }: KeyboardEvent) => {
-    const word = game.onKeydown({ key, code });
-    if (word) {
-      word.isKilled() && shootConfetti(word);
-    } else {
-      console.log("miss");
+    const state = game.getState().state;
+
+    if (state === GAME_STATE.PLAY) {
+      const word = game.onKeydown({ key, code });
+      if (word) {
+        word.isKilled() && shootConfetti(word);
+      } else {
+        console.log("miss");
+      }
     }
   }, []);
+
+  const handleLeaderboard = (props: { id: number; deadline: string }) => {
+    setLeaderboard(props);
+    document.removeEventListener("keydown", handleKeyDown);
+  };
 
   useEffect(() => {
     document.addEventListener("keydown", handleKeyDown);
@@ -146,14 +155,15 @@ function App() {
     };
   }, []);
 
-  const handleLeaderboard = (props: { id: number; deadline: string }) => {
-    setLeaderboard(props);
-  };
-
   return (
     <div className="App">
       {leaderboard ? (
-        <Leaderboard {...leaderboard} />
+        <Leaderboard
+          {...leaderboard}
+          onHome={() => {
+            setLeaderboard(null);
+          }}
+        />
       ) : (
         <GameScreen
           FPS={FPS}

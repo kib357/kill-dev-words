@@ -270,9 +270,10 @@
 .game .viewport {
   position: absolute;
   top: 230px;
-  left: 83px;
-  right: 82px;
-  bottom: 335px;
+  left: 60px;
+  right: 105px;
+  bottom: 325px;
+  overflow: hidden;
 }
 
 .leaderboard .deadline {
@@ -288,4 +289,30 @@
   padding-left: 36px;
   font-size: 154px;
   line-height: 1;
+}
+
+.leaderboard .board {
+  padding-left: 36px;
+  padding-top: 6em;
+}
+
+.leaderboard .board > div {
+  padding-bottom: 20px;
+}
+
+.leaderboard .button {
+  position: fixed;
+  right: 100px;
+  bottom: 100px;
+  transition: opacity 300ms;
+}
+
+.button {
+  padding: 22px 42px;
+  font-size: 22px;
+  line-height: 1;
+  color: black;
+  border: 3px solid black;
+  box-shadow: 6px 6px 0px white;
+  background: white;
 }

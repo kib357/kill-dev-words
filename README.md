@@ -2,8 +2,6 @@
 
 ### TODO
 
-- score screen layout
-- - save game result to leaderboard (localstorage)
 - main screen layout
 - register and howto screens layout
 - add animation on key press

@@ -4,6 +4,7 @@ import NumberEasing from "react-number-easing";
 import { keyframes } from "@emotion/react";
 import { css } from "@emotion/css";
 import DesktopMiniSrc from "./desktop-mini.png";
+import { isConditionalExpression } from "typescript";
 
 type IOnLeaderboard = { id: number; deadline: string };
 
@@ -14,6 +15,8 @@ function GameScreen(props: {
   FPS: number;
   onLeaderboard: (props: IOnLeaderboard) => void;
 }) {
+  const playerId = Math.floor(Math.random() * 100000);
+  const playerName = "Name";
   const [isScoreScreen, setScoreScreen] = React.useState(false);
   const { state, tickId, duration, FPS, onLeaderboard } = props;
   const Words = React.useMemo(
@@ -107,9 +110,30 @@ function GameScreen(props: {
       timeoutId = setTimeout(() => {
         setScoreScreen(true);
 
+        let leaderboardData: { id: number; score: number; name: string }[] =
+          JSON.parse(localStorage.getItem("leaderboard") || "[]");
+        const data = {
+          id: playerId,
+          name: playerName,
+          score: state.score,
+        };
+        // update previous results
+        if (leaderboardData.find(({ id: _id }) => _id === playerId)) {
+          leaderboardData = leaderboardData.map((data) => {
+            if (data.score < state.score) {
+              data.score = state.score;
+            }
+            return data;
+          });
+        } else {
+          leaderboardData.push(data);
+        }
+
+        localStorage.setItem("leaderboard", JSON.stringify(leaderboardData));
+
         timeoutLeaderboardId = setTimeout(() => {
           onLeaderboard({
-            id: 1,
+            id: playerId,
             deadline: deadlineValue,
           });
         }, 1500);
@@ -199,7 +223,7 @@ function GameScreen(props: {
 interface IScore {
   value?: number;
 }
-function formatScore(n: number) {
+export function formatScore(n: number) {
   return numberWithSpaces(Math.floor(n));
 }
 const Score: React.FC<IScore> = React.memo(({ value = 0 }) => {
