@@ -64,27 +64,21 @@ function GameScreen(props: {
   useEffect(() => {
     const dpr = window.devicePixelRatio || 1;
     const background = document.getElementById("desktop") as HTMLCanvasElement;
+    var rect = background.getBoundingClientRect();
     background.width = background.clientWidth * dpr;
     background.height = background.clientHeight * dpr;
     const context = background.getContext("2d");
+    if (!context) return;
+
+    context.scale(dpr, dpr);
 
     const image = new Image();
     image.src = DesktopMiniSrc;
     image.onload = () => {
-      if (!context) return;
-
-      context.scale(dpr, dpr);
-
-      const multiplier = 1.15;
+      const multiplier = 1.18;
       const width = image.width * multiplier;
       const height = image.height * multiplier;
-      context.drawImage(
-        image,
-        Math.floor((background.width - width) / 2),
-        100 + Math.floor((background.height - height) / 2),
-        width,
-        height
-      );
+      context.drawImage(image, 0, 0, width, height);
     };
   }, []);
 
