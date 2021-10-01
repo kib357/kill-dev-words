@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { IGameState } from "./Game";
+import { GAME_STATE, IGameState } from "./Game";
 import NumberEasing from "react-number-easing";
 import { keyframes } from "@emotion/react";
 import { css } from "@emotion/css";
@@ -111,10 +111,17 @@ function GameScreen(props: {
       <div className="container">
         <div className="logo"></div>
         <div className="viewport">
-          <div className="words">{Words}</div>
-          <div className="particles" id="particles">
-            {Particles}
-          </div>
+          {state?.state === GAME_STATE.SCORE ? (
+            <GameOver duration={duration} state={state} />
+          ) : null}
+          {state?.state === GAME_STATE.PLAY ? (
+            <>
+              <div className="words">{Words}</div>
+              <div className="particles" id="particles">
+                {Particles}
+              </div>
+            </>
+          ) : null}
           <canvas
             style={{ width: "100%", height: "100%" }}
             id="fireworks"
@@ -137,7 +144,9 @@ function GameScreen(props: {
             <Score key="score-wrapper" value={state?.score} />
           </span>
         </div>
-        <div className="typed-char outlined">T</div>
+        <div style={{ opacity: 0 }} className="typed-char outlined">
+          T
+        </div>
       </div>
     </div>
   );
@@ -253,6 +262,20 @@ function convertMS(milliseconds: number) {
     minute: minute,
     seconds: seconds,
   };
+}
+
+function GameOver({
+  state,
+  duration,
+}: {
+  state: IGameState;
+  duration: number;
+}) {
+  return (
+    <div className="gameover eightBit">
+      {state.game_duration === duration ? "TIME IS UP" : "GAME OVER"}
+    </div>
+  );
 }
 
 export default GameScreen;

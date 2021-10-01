@@ -33,9 +33,9 @@ function Game({ duration = 30 * 1000, WORDS = [], PLAYER_OFFSET }: IGame) {
   const start_timestamp = Date.now();
   let game_duration = 0;
   let state: GAME_STATE = GAME_STATE.PLAY;
-  const stopGame = () => {
+  const stopGame = (isTimeUp: boolean) => {
     state = GAME_STATE.SCORE;
-    game_duration = getDuration();
+    game_duration = isTimeUp ? duration : getDuration();
   };
 
   let score = 0;
@@ -185,7 +185,7 @@ function Game({ duration = 30 * 1000, WORDS = [], PLAYER_OFFSET }: IGame) {
 
       const collision = detectWordCollision(words);
       if (collision || getTimeIsUp()) {
-        stopGame();
+        stopGame(getTimeIsUp());
       } else {
         words = killWords(words);
         spawnWord();

@@ -2,7 +2,6 @@
 
 ### TODO
 
-- support deadline timer
 - score screen layout
 - - save game result to leaderboard (localstorage)
 - main screen layout
@@ -11,6 +10,7 @@
 - add start game countdown (3 - 2 - 1)
 - support noisy banners gameplay
 - leaderboard screen layout with controls (up, down)
+- detect why words rerenders???
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 

@@ -186,6 +186,14 @@
   z-index: 3;
 }
 
+.game .gameover {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 34px;
+}
+
 .game .logo {
   width: calc(364px / 2);
   height: calc(88px / 2);
