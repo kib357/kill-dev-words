@@ -92,6 +92,7 @@ function Leaderboard({ id, deadline, onHome }: ILeaderboard) {
         ))}
       </div>
       <div
+        onClick={onHome}
         style={{
           opacity: showBtn ? 1 : 0,
         }}
