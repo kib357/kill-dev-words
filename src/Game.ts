@@ -151,18 +151,22 @@ function Game({ duration = 30 * 1000, WORDS = [], PLAYER_OFFSET }: IGame) {
       const prepareCode = (code: string) =>
         code.toLowerCase().replace("key", "");
       const char = prepareCode(e.code);
-      const typedWord = getTypedWord(words);
+
+      const newWords = [...words]; // immutable
+      const typedWord = getTypedWord(newWords);
       if (typedWord) {
         const word = typedWord.getWord();
         const isCorrect = word[typedWord?.getTyped()] === char;
         if (isCorrect) {
           typedWord.setTyped();
+          words = newWords;
           shootParticle(typedWord);
           return typedWord;
         }
       } else {
         const newTyped = findClosestWord(words, char);
         newTyped?.setTyped();
+        words = newWords;
         newTyped && shootParticle(newTyped);
         return newTyped;
       }
