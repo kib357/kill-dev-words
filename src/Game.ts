@@ -69,14 +69,15 @@ function Game({ duration = 30 * 1000, WORDS = [], PLAYER_OFFSET }: IGame) {
     if (wordSpawnTimeout <= now) {
       wordSpawnTimeout = generateSpawnTimeout();
       const word = getRandomWord();
-      words.push(
+      words = [
+        ...words,
         Word({
           word,
           pos: getRandomPos(),
           timestamp: Date.now(),
           duration: getRandomDuration(word),
-        })
-      );
+        }),
+      ];
     }
   };
 

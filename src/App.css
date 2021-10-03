@@ -305,7 +305,7 @@
   right: 100px;
   bottom: 100px;
   transition: opacity 500ms;
-  transition-timing-function: steps(10);
+  transition-timing-function: steps(5) !important;
 }
 
 .button {
