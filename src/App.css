@@ -123,7 +123,7 @@
 
 .game.leaderboard .deadline-container {
   transform: translate3d(0px, -2.2em, 0px) !important;
-  transition-delay: 15ms !important;
+  /* transition-delay: 15ms !important; */
 }
 
 .game.leaderboard .deadline-container,
@@ -145,7 +145,7 @@
 .game.leaderboard .score-in-deadline {
   opacity: 1;
   transform: translateY(0);
-  transition: all 300ms;
+  transition: all 500ms;
   transition-delay: 1200ms;
 }
 
@@ -165,8 +165,8 @@
   opacity: 0;
   transition-delay: 0s, 1200ms !important;
   transition-property: transform, opacity !important;
-  transition-timing-function: linear, ease !important;
-  transition-duration: 800ms, 220ms !important;
+  transition-timing-function: linear, steps(10) !important;
+  transition-duration: 800ms, 500ms !important;
 }
 
 .game .deadline,
@@ -270,8 +270,8 @@
 .game .viewport {
   position: absolute;
   top: 230px;
-  left: 60px;
-  right: 105px;
+  left: 110px;
+  width: 920px;
   bottom: 325px;
   overflow: hidden;
 }
@@ -304,7 +304,8 @@
   position: fixed;
   right: 100px;
   bottom: 100px;
-  transition: opacity 300ms;
+  transition: opacity 500ms;
+  transition-timing-function: steps(10);
 }
 
 .button {

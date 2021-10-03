@@ -82,7 +82,8 @@ const FPS = 30;
 const WORDS = Lib();
 
 // const DURATION = 30 * 1000;
-const DURATION = 1000;
+const DURATION = 60 * 1000; // minute
+// const DURATION = 1000;
 
 function App() {
   const [leaderboard, setLeaderboard] = useState<null | {

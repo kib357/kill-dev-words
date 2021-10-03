@@ -16,45 +16,43 @@ function GameScreen(props: {
   onLeaderboard: (props: IOnLeaderboard) => void;
 }) {
   const playerId = Math.floor(Math.random() * 100000);
-  const playerName = "Name";
+  const playerName = "iblan";
   const [isScoreScreen, setScoreScreen] = React.useState(false);
   const { state, tickId, duration, FPS, onLeaderboard } = props;
-  const Words = React.useMemo(
-    () =>
-      state?.words.map((word) => {
-        const { duration } = word;
-        const _word = word.getWord();
-        const typed = _word.substr(0, word.getTyped());
-        const cursor = typed ? _word.substr(word.getTyped(), 1) : null;
-        const notTyped = _word.substr(
-          typed ? word.getTyped() + 1 : word.getTyped()
-        );
+  const Words = React.useMemo(() => {
+    return state?.words.map((word) => {
+      const { duration } = word;
+      const _word = word.getWord();
+      const typed = _word.substr(0, word.getTyped());
+      const cursor = typed ? _word.substr(word.getTyped(), 1) : null;
+      const notTyped = _word.substr(
+        typed ? word.getTyped() + 1 : word.getTyped()
+      );
 
-        // duration min 500 max 10000
-        // 6000 - 60
-        const steps = Math.floor(duration / 110);
+      // duration min 500 max 10000
+      // 6000 - 60
+      const steps = Math.floor(duration / 110);
 
-        return (
-          <div
-            key={word.id}
-            className={`word toEnd eightBit`}
-            style={{
-              zIndex: cursor ? 2 : 1,
-              left: word.pos + "%",
-              transitionDuration: `${duration}ms`,
-              animationDuration: `${duration}ms`,
-              animationTimingFunction: `steps(${steps}, end)`,
-              transitionTimingFunction: `steps(${steps}, end)`,
-            }}
-          >
-            <span className="outlined_inverted">{typed}</span>
-            {cursor ? <span className="cursor">{cursor}</span> : null}
-            <span>{notTyped}</span>
-          </div>
-        );
-      }),
-    [state?.words || []]
-  );
+      return (
+        <div
+          key={word.id}
+          className={`word toEnd eightBit`}
+          style={{
+            zIndex: cursor ? 2 : 1,
+            left: word.pos + "%",
+            transitionDuration: `${duration}ms`,
+            animationDuration: `${duration}ms`,
+            animationTimingFunction: `steps(${steps}, end)`,
+            transitionTimingFunction: `steps(${steps}, end)`,
+          }}
+        >
+          <span className="outlined_inverted">{typed}</span>
+          {cursor ? <span className="cursor">{cursor}</span> : null}
+          <span>{notTyped}</span>
+        </div>
+      );
+    });
+  }, [state?.words || []]);
   const particles = state?.getParticles() || [];
   const Particles = React.useMemo(
     () => particles.map((particle) => <Particle {...particle} />),
@@ -156,7 +154,7 @@ function GameScreen(props: {
             bottom: "36px",
             left: "36px",
             willChange: "transform",
-            transition: `transform ${Math.floor(1000 / FPS)}ms`,
+            transition: `transform ${Math.floor(1100 / FPS)}ms linear`,
             transform: `translate3d(0,${Math.floor(
               map(deadlinePos, 0, 1, -978, 0)
             )}px,0)`,

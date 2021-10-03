@@ -54,7 +54,7 @@ function Game({ duration = 30 * 1000, WORDS = [], PLAYER_OFFSET }: IGame) {
     const duration = Math.floor(
       3800 + word.length * (1200 + Math.random() * 600)
     );
-    const levelMultiplier = score >= 200 ? 1 / (score / 200) : 1;
+    const levelMultiplier = score >= 200 ? 1 / (score / 500) : 1;
 
     return duration * levelMultiplier;
   };
