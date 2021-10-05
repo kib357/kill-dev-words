@@ -7,6 +7,13 @@ interface IGame {
 }
 export type IDestination = { x: number; y: number };
 
+export enum SCREENS {
+  "MAIN",
+  "REGISTRATION",
+  "GAME",
+  "LEADERBOARD",
+}
+
 export interface IParticle {
   duration: number;
   destination: IDestination;

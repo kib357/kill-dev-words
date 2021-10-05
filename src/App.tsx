@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import "./App.css";
-import Game, { GAME_STATE, IGameState } from "./Game";
+import Game, { GAME_STATE, IGameState, SCREENS } from "./Game";
 import confetti, { shape } from "canvas-confetti";
 import GameScreen from "./GameScreen";
 import { IWordObject } from "./Word";
 import DesktopMiniSrc from "./desktop-mini.png";
 import Leaderboard from "./Leaderboard";
 import MainScreen from "./MainScreen";
+import Registration from "./Registration";
 
 const PLAYER_OFFSET = 65;
 const shootConfetti = (word: IWordObject) => {
@@ -91,6 +92,8 @@ function App() {
     id: number;
     deadline: string;
   }>(null);
+  const [screen, setScreen] = useState<SCREENS>(SCREENS.MAIN);
+  const handleScreenChange = (_screen: SCREENS) => setScreen(_screen);
   const [gameLoopId, setGameLoopId] = useState<NodeJS.Timeout | null>(null);
   const [tickId, setTickId] = useState(0);
   const [state, setState] = useState<IGameState | null>(null);
@@ -114,6 +117,7 @@ function App() {
   const handleLeaderboard = (props: { id: number; deadline: string }) => {
     setLeaderboard(props);
     document.removeEventListener("keydown", handleKeyDown);
+    setScreen(SCREENS.LEADERBOARD);
   };
 
   useEffect(() => {
@@ -146,16 +150,11 @@ function App() {
 
   return (
     <div className="App">
-      <MainScreen />
-      {/* GAMESCREEN AND LEADERBOARD */}
-      {/* {leaderboard ? (
-        <Leaderboard
-          {...leaderboard}
-          onHome={() => {
-            setLeaderboard(null);
-          }}
-        />
-      ) : (
+      {screen === SCREENS.MAIN ? (
+        <MainScreen onScreenChange={handleScreenChange} />
+      ) : null}
+      {screen === SCREENS.REGISTRATION ? <Registration /> : null}
+      {screen === SCREENS.GAME ? (
         <GameScreen
           FPS={FPS}
           duration={DURATION}
@@ -163,36 +162,15 @@ function App() {
           state={state}
           onLeaderboard={handleLeaderboard}
         />
-      )} */}
-      {/* <div className="words">
-        {state?.words.map((word) => {
-          const { duration } = word;
-          const _word = word.getWord();
-          const typed = _word.substr(0, word.getTyped());
-          const notTyped = _word.substr(word.getTyped());
-
-          return (
-            <div
-              key={word.id}
-              className={`word toEnd`}
-              style={{
-                left: word.pos + "%",
-                transitionDuration: `${duration}ms`,
-                animationDuration: `${duration}ms`,
-                animationTimingFunction: "steps(100, end)",
-                transitionTimingFunction: "steps(100, end)",
-                background: notTyped.length === 0 ? "green" : undefined,
-              }}
-            >
-              <span style={{ color: "orange", fontWeight: "bold" }}>
-                {typed}
-              </span>
-              {notTyped}
-            </div>
-          );
-        })}
-      </div>
-      <div className="player"></div> */}
+      ) : null}
+      {screen === SCREENS.LEADERBOARD && leaderboard ? (
+        <Leaderboard
+          {...leaderboard}
+          onHome={() => {
+            setLeaderboard(null);
+          }}
+        />
+      ) : null}
     </div>
   );
 }

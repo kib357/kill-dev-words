@@ -239,7 +239,8 @@
 }
 
 .game .desktop,
-.main-screen .desktop {
+.main-screen .desktop,
+.registration .desktop {
   position: fixed;
   top: 0;
   left: 0;
@@ -247,11 +248,35 @@
   /* left: 50%; */
   /* transform: translate(-50%); */
   /* width: 171%; */
-  height: 120%;
+  height: 100%;
   /* background: url("./desktop-mini.png") no-repeat; */
   /* background-size: 100%; */
   z-index: 3;
   transform-origin: left bottom;
+}
+
+.game .desktop,
+.registration .desktop {
+  transform: translateY(100px);
+}
+
+.main-screen .title {
+  animation: stranger-things 35s infinite linear;
+  animation-fill-mode: both;
+}
+
+@keyframes stranger-things {
+  0% {
+    transform: scale(0.9);
+  }
+
+  50% {
+    transform: scale(1.15);
+  }
+
+  100% {
+    transform: scale(0.95);
+  }
 }
 
 .main-screen .desktop {
@@ -262,7 +287,7 @@
 }
 
 .main-screen.to-registration .desktop {
-  transform: translateY(-0.9%) scale(1.18);
+  transform: translateY(17.9%) scale(1.18);
 }
 
 .main-screen .menu {
@@ -320,7 +345,8 @@
 }
 
 .game .logo,
-.main-screen .logo {
+.main-screen .logo,
+.registration .logo {
   width: calc(364px / 2);
   height: calc(88px / 2);
   background: url("./logo.png") no-repeat;
