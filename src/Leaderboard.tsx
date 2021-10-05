@@ -21,7 +21,7 @@ function Leaderboard({ id, deadline, onHome }: ILeaderboard) {
   const keydownTimestamp = Date.now();
   const handleKeyDown = React.useCallback((e: KeyboardEvent) => {
     const _showBtn = Date.now() - keydownTimestamp > 6000;
-    debugger;
+    // debugger;
     if (_showBtn && e.code === "Enter") {
       onHome();
     }

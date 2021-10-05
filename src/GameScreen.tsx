@@ -3,8 +3,7 @@ import { GAME_STATE, IGameState } from "./Game";
 import NumberEasing from "react-number-easing";
 import { keyframes } from "@emotion/react";
 import { css } from "@emotion/css";
-import DesktopMiniSrc from "./desktop-mini.png";
-import { isConditionalExpression } from "typescript";
+import DesktopCanvas from "./DesktopCanvas";
 
 type IOnLeaderboard = { id: number; deadline: string };
 
@@ -65,41 +64,6 @@ function GameScreen(props: {
     duration,
     tickId,
   });
-
-  useEffect(() => {
-    const dpr = window.devicePixelRatio || 1;
-    const background = document.getElementById("desktop") as HTMLCanvasElement;
-    var rect = background.getBoundingClientRect();
-    background.width = background.clientWidth * dpr;
-    background.height = background.clientHeight * dpr;
-    const context = background.getContext("2d");
-    if (!context) return;
-
-    context.scale(dpr, dpr);
-
-    const image = new Image();
-    image.src = DesktopMiniSrc;
-    image.onload = () => {
-      const multiplier = 1.18;
-      const width = image.width * multiplier;
-      const height = image.height * multiplier;
-      context.drawImage(image, 0, 0, width, height);
-
-      // const zoomInCanvas = () => {
-      //   console.log("zoom in");
-      //   // context.clearRect(0, 0, canvas.width, canvas.height);
-      //   // const multiplier = 2;
-      //   // const width = image.width * multiplier;
-      //   // const height = image.height * multiplier;
-      //   // context.drawImage(image, 0, 0, width, height);
-      //   context.scale(20, 20);
-      // };
-
-      // setTimeout(() => {
-      //   zoomInCanvas();
-      // }, 2000);
-    };
-  }, []);
 
   useEffect(() => {
     let timeoutId: NodeJS.Timeout;
@@ -194,7 +158,7 @@ function GameScreen(props: {
           ></canvas>
           <div className="player"></div>
         </div>
-        <canvas id="desktop" className="desktop" />
+        <DesktopCanvas />
       </div>
       <div className="sidebar">
         <div className="score">

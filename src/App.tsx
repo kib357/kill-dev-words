@@ -6,6 +6,7 @@ import GameScreen from "./GameScreen";
 import { IWordObject } from "./Word";
 import DesktopMiniSrc from "./desktop-mini.png";
 import Leaderboard from "./Leaderboard";
+import MainScreen from "./MainScreen";
 
 const PLAYER_OFFSET = 65;
 const shootConfetti = (word: IWordObject) => {
@@ -143,22 +144,11 @@ function App() {
     }
   }, [state?.state]);
 
-  useEffect(() => {
-    const background = document.getElementById("desktop") as HTMLCanvasElement;
-    const context = background.getContext("2d");
-
-    const image = new Image();
-    image.src = DesktopMiniSrc;
-    image.onload = () => {
-      if (!context) return;
-
-      context.drawImage(image, background.clientWidth, background.clientHeight);
-    };
-  }, []);
-
   return (
     <div className="App">
-      {leaderboard ? (
+      <MainScreen />
+      {/* GAMESCREEN AND LEADERBOARD */}
+      {/* {leaderboard ? (
         <Leaderboard
           {...leaderboard}
           onHome={() => {
@@ -173,7 +163,7 @@ function App() {
           state={state}
           onLeaderboard={handleLeaderboard}
         />
-      )}
+      )} */}
       {/* <div className="words">
         {state?.words.map((word) => {
           const { duration } = word;

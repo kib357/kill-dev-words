@@ -106,8 +106,10 @@
 }
 
 .game.leaderboard .deadline-container,
-.game.leaderboard .desktop {
-  transition: all linear 800ms !important;
+.game.leaderboard .desktop,
+.main-screen .desktop {
+  transition: all 800ms steps(10) !important;
+  pointer-events: none;
 }
 
 .game.leaderboard .deadline-container .outlined,
@@ -236,7 +238,8 @@
   transition-timing-function: steps(10, end);
 }
 
-.game .desktop {
+.game .desktop,
+.main-screen .desktop {
   position: fixed;
   top: 0;
   left: 0;
@@ -251,6 +254,63 @@
   transform-origin: left bottom;
 }
 
+.main-screen .desktop {
+  height: 100%;
+  transform-origin: center bottom;
+  transform: none;
+  transform: translateY(-120px) scale(0.6);
+}
+
+.main-screen.to-registration .desktop {
+  transform: translateY(-0.9%) scale(1.18);
+}
+
+.main-screen .menu {
+  position: absolute;
+  list-style: none;
+  left: 835px;
+  top: 543px;
+  width: 250px;
+  height: 82px;
+  padding: 0;
+  margin: 0;
+  font-size: 12px;
+  line-height: 14px;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.main-screen .menu li {
+  padding-bottom: 18px;
+  position: relative;
+  cursor: pointer;
+}
+
+.main-screen .menu li.active::before {
+  content: ">";
+  position: absolute;
+  left: 6px;
+  top: -1px;
+  animation: blink 900ms infinite;
+  animation-timing-function: steps(3);
+  animation-fill-mode: both;
+}
+
+@keyframes blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  25% {
+    opacity: 0;
+  }
+
+  50% {
+    opacity: 1;
+  }
+}
+
 .game .gameover {
   position: absolute;
   top: 50%;
@@ -259,12 +319,15 @@
   font-size: 34px;
 }
 
-.game .logo {
+.game .logo,
+.main-screen .logo {
   width: calc(364px / 2);
   height: calc(88px / 2);
   background: url("./logo.png") no-repeat;
+  background-position-y: bottom;
   background-size: 100%;
-  margin: 36px auto 0;
+  margin: 0 auto;
+  padding-top: 36px;
 }
 
 .game .viewport {
