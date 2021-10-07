@@ -98,9 +98,10 @@ function GameScreen(props: {
         };
         // update previous results
         // TODO save copy to FIREBASE
-        if (leaderboardData.find(({ id: _id }) => _id === playerId)) {
+        const isCurrentPlayer = (_id: string) => _id === playerId;
+        if (leaderboardData.find(({ id: _id }) => isCurrentPlayer(_id))) {
           leaderboardData = leaderboardData.map((data) => {
-            if (data.score < state.score) {
+            if (isCurrentPlayer(data.id) && data.score < state.score) {
               data.score = state.score;
             }
             return data;

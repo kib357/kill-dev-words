@@ -2,7 +2,7 @@
 
 ### TODO
 
-- SCORE BUG maximum rewrites for all users
+
 
 - main screen layout
 - register and howto screens layout
