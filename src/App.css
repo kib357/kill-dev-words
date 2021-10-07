@@ -107,6 +107,7 @@
 
 .game.leaderboard .deadline-container,
 .game.leaderboard .desktop,
+.registration .desktop,
 .main-screen .desktop {
   transition: all 800ms steps(10) !important;
   pointer-events: none;
@@ -365,6 +366,16 @@
   overflow: hidden;
 }
 
+.registration .registration-step,
+.registration .how-to {
+  position: absolute;
+  top: 252px;
+  left: 548px;
+  width: 840px;
+  height: 530px;
+  overflow: hidden;
+}
+
 .leaderboard .deadline {
   padding-top: 551px;
 }
@@ -406,4 +417,42 @@
   box-shadow: 6px 6px 0px white;
   background: white;
   cursor: pointer;
+}
+
+.registration .registration-step {
+  background: url("./reg.png") no-repeat;
+  background-size: 40%;
+  background-position: 100% 35%;
+  box-sizing: border-box;
+  padding-right: 400px;
+}
+
+.registration .registration-step .text {
+  font-size: 18px;
+  line-height: 27px;
+  padding-top: 100px;
+  padding-bottom: 30px;
+  text-transform: uppercase;
+}
+
+.registration .registration-step label {
+  font-size: 16px;
+  line-height: 24px;
+}
+
+.registration .registration-step input {
+  display: block;
+  background-color: black;
+  border: none;
+  border-bottom: 1px solid white;
+  width: 100%;
+  font-size: 14px;
+  line-height: 21px;
+  outline: none;
+  color: white;
+}
+
+.registration .registration-step .button {
+  margin-top: 40px;
+  text-align: center;
 }

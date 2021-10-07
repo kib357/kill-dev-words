@@ -14,8 +14,10 @@ function GameScreen(props: {
   FPS: number;
   onLeaderboard: (props: IOnLeaderboard) => void;
 }) {
-  const playerId = Math.floor(Math.random() * 100000);
-  const playerName = "iblan";
+  const playerId =
+    localStorage.getItem("player-id") ||
+    String(Math.floor(Math.random() * 100000));
+  const playerName = localStorage.getItem("player") || "Name";
   const [isScoreScreen, setScoreScreen] = React.useState(false);
   const { state, tickId, duration, FPS, onLeaderboard } = props;
   const Words = React.useMemo(() => {
@@ -72,12 +74,17 @@ function GameScreen(props: {
       timeoutId = setTimeout(() => {
         setScoreScreen(true);
 
-        let leaderboardData: { id: number; score: number; name: string }[] =
-          JSON.parse(localStorage.getItem("leaderboard") || "[]");
+        let leaderboardData: {
+          id: string;
+          score: number;
+          name: string;
+          contact: string;
+        }[] = JSON.parse(localStorage.getItem("leaderboard") || "[]");
         const data = {
           id: playerId,
           name: playerName,
           score: state.score,
+          contact: localStorage.getItem("contact") || "",
         };
         // update previous results
         if (leaderboardData.find(({ id: _id }) => _id === playerId)) {

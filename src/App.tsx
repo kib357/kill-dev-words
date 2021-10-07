@@ -92,7 +92,7 @@ function App() {
     id: number;
     deadline: string;
   }>(null);
-  const [screen, setScreen] = useState<SCREENS>(SCREENS.GAME);
+  const [screen, setScreen] = useState<SCREENS>(SCREENS.REGISTRATION);
   const handleScreenChange = (_screen: SCREENS) => setScreen(_screen);
   const [gameLoopId, setGameLoopId] = useState<NodeJS.Timeout | null>(null);
   const [tickId, setTickId] = useState(0);
