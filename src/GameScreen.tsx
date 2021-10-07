@@ -30,7 +30,7 @@ function GameScreen(props: {
 
       // duration min 500 max 10000
       // 6000 - 60
-      const steps = Math.floor(duration / 110);
+      const steps = Math.floor(duration / 90);
 
       return (
         <div

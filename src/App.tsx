@@ -84,7 +84,7 @@ const FPS = 30;
 const WORDS = Lib();
 
 // const DURATION = 30 * 1000;
-const DURATION = 60 * 1000; // minute
+const DURATION = 2 * 60 * 1000; // minute
 // const DURATION = 1000;
 
 function App() {
@@ -92,7 +92,7 @@ function App() {
     id: number;
     deadline: string;
   }>(null);
-  const [screen, setScreen] = useState<SCREENS>(SCREENS.MAIN);
+  const [screen, setScreen] = useState<SCREENS>(SCREENS.GAME);
   const handleScreenChange = (_screen: SCREENS) => setScreen(_screen);
   const [gameLoopId, setGameLoopId] = useState<NodeJS.Timeout | null>(null);
   const [tickId, setTickId] = useState(0);

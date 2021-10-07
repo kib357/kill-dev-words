@@ -18,7 +18,7 @@ function MainScreen({ onScreenChange }: IMainScreen) {
     if (activeMenu === 0) {
       setIsToReg(true);
       setTimeout(() => {
-        onScreenChange(SCREENS.REGISTRATION);
+        onScreenChange(SCREENS.GAME);
       }, 810);
     }
   };

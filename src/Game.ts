@@ -29,6 +29,7 @@ export interface IGameState {
   getParticles: () => IParticle[];
   current?: IWordObject;
   start_timestamp: number;
+  getKilledWordCount: () => number;
 }
 
 export enum GAME_STATE {
@@ -59,12 +60,25 @@ function Game({ duration = 30 * 1000, WORDS = [], PLAYER_OFFSET }: IGame) {
   let wordSpawnTimeout = 0;
   const getRandomDuration = (word: string) => {
     const duration = Math.floor(
-      3800 + word.length * (1200 + Math.random() * 600)
+      3500 + word.length * (2200 + Math.random() * 600)
     );
-    const levelMultiplier = score >= 200 ? 1 / (score / 500) : 1;
+    // 0.6 -> 1
+    // 100 - 1
+    // 1000 - 10
+    // 5000 - 50
+    const levelMultiplier = score ? 1 - 0.6 * (score / 2400) : 1;
 
     return duration * levelMultiplier;
   };
+
+  // const getRandomDuration = (word: string) => {
+  //   const duration = Math.floor(
+  //     3800 + word.length * (1200 + Math.random() * 600)
+  //   );
+  //   const levelMultiplier = score >= 200 ? 1 / (score / 500) : 1;
+
+  //   return duration * levelMultiplier;
+  // };
 
   const getRandomWord = () => {
     const index = Math.floor(Math.random() * WORDS?.length);
@@ -92,6 +106,8 @@ function Game({ duration = 30 * 1000, WORDS = [], PLAYER_OFFSET }: IGame) {
     const now = Date.now();
     return start_timestamp + duration <= now;
   };
+
+  const getKilledWordCount = () => score / 100;
 
   const getDuration = () => Date.now() - start_timestamp;
 
@@ -184,6 +200,7 @@ function Game({ duration = 30 * 1000, WORDS = [], PLAYER_OFFSET }: IGame) {
       return {
         state,
         score: _score,
+        getKilledWordCount,
         game_duration,
         words,
         getParticles,
