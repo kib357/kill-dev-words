@@ -115,6 +115,7 @@ function GameScreen(props: {
           onLeaderboard({
             id: playerId,
             deadline: deadlineValue,
+            score: state.score,
           });
         }, 1500);
       }, 3000);

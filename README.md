@@ -2,7 +2,6 @@
 
 ### TODO
 
-- SCORE show actual, not maximum
 - SCORE BUG maximum rewrites for all users
 
 - main screen layout
