@@ -2,20 +2,24 @@ import React, { useEffect, useState } from "react";
 import { formatScore } from "./GameScreen";
 
 interface ILeaderboard {
-  id: number;
-  deadline: string;
+  id?: string;
+  deadline?: string;
   onHome: () => void;
 }
 
 interface IData {
-  id: number;
+  id: string;
   name: string;
   score: number;
 }
 
 function Leaderboard({ id, deadline, onHome }: ILeaderboard) {
   const [showBtn, setBtn] = useState(false);
-  const [data, setData] = useState<IData[]>([]);
+  const [data] = useState<IData[]>(
+    JSON.parse(localStorage.getItem("leaderboard") || "[]").sort(
+      (a: any, b: any) => b.score - a.score
+    )
+  );
   const score = data.find(({ id: _id }) => _id === id)?.score || 0;
 
   const keydownTimestamp = Date.now();
@@ -31,10 +35,6 @@ function Leaderboard({ id, deadline, onHome }: ILeaderboard) {
 
   useEffect(() => {
     document.addEventListener("keydown", handleKeyDown);
-    let leaderboardData: IData[] = JSON.parse(
-      localStorage.getItem("leaderboard") || "[]"
-    );
-    setData(leaderboardData.sort((a, b) => b.score - a.score));
 
     const WAIT = 4000;
     let timeout = setTimeout(() => {
@@ -56,16 +56,20 @@ function Leaderboard({ id, deadline, onHome }: ILeaderboard) {
 
   return (
     <div className="leaderboard">
-      <div className="deadline">
-        DEADLINE{" "}
-        <span className="outlined" style={{ marginLeft: "0.2em" }}>
-          {deadline}
-        </span>
-      </div>
-      <div className="score">
-        <span className="outlined">SCORE</span>
-        <span style={{ marginLeft: "1.9em" }}>{formatScore(score)}</span>
-      </div>
+      {deadline ? (
+        <div className="deadline">
+          DEADLINE{" "}
+          <span className="outlined" style={{ marginLeft: "0.2em" }}>
+            {deadline}
+          </span>
+        </div>
+      ) : null}
+      {score ? (
+        <div className="score">
+          <span className="outlined">SCORE</span>
+          <span style={{ marginLeft: "1.9em" }}>{formatScore(score)}</span>
+        </div>
+      ) : null}
       <div className="board">
         {data.map(({ id: _id, name, score }, index) => (
           <div>

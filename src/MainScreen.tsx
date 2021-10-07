@@ -18,8 +18,17 @@ function MainScreen({ onScreenChange }: IMainScreen) {
     if (activeMenu === 0) {
       setIsToReg(true);
       setTimeout(() => {
-        onScreenChange(SCREENS.GAME);
+        localStorage.removeItem("skip-registration");
+        onScreenChange(SCREENS.REGISTRATION);
       }, 810);
+    } else if (activeMenu === 1) {
+      setIsToReg(true);
+      setTimeout(() => {
+        localStorage.setItem("skip-registration", "true");
+        onScreenChange(SCREENS.REGISTRATION);
+      }, 810);
+    } else if (activeMenu === 2) {
+      onScreenChange(SCREENS.LEADERBOARD);
     }
   };
 

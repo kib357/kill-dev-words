@@ -456,3 +456,75 @@
   margin-top: 40px;
   text-align: center;
 }
+
+.registration .how-to {
+  background: url("./rules.png") no-repeat;
+  background-size: 100%;
+  background-position: 50% 35%;
+  width: 920px;
+  left: 500px;
+}
+
+.how-to .rules {
+  position: absolute;
+  text-align: center;
+  color: black;
+  top: 84px;
+  left: 203px;
+  width: 520px;
+  height: 290px;
+}
+
+.rules h1 {
+  margin: 0;
+  padding-top: 36px;
+  font-size: 20px;
+  line-height: 1.2;
+}
+
+.rules p {
+  text-transform: uppercase;
+  margin: 0 auto;
+  padding-top: 20px;
+  font-size: 14px;
+  line-height: 1.4;
+  width: 70%;
+}
+
+.inverted-bar {
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  position: absolute;
+  border: 3px solid white;
+  font-size: 22px;
+  line-height: 22px;
+  width: 370px;
+  height: 66px;
+  background-color: black;
+}
+
+.inverted-bar:before,
+.inverted-bar:after {
+  text-align: center;
+  height: 66px;
+  line-height: 66px;
+  position: absolute;
+  white-space: nowrap;
+  overflow: hidden;
+  content: attr(data-content);
+}
+
+.inverted-bar:before {
+  color: white;
+  width: 100%;
+  z-index: 1;
+}
+
+.inverted-bar:after {
+  background-color: white;
+  color: black;
+  content: "";
+  width: attr(data-progress);
+  /* width: 20%; */
+}

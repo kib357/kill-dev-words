@@ -89,10 +89,10 @@ const DURATION = 2 * 60 * 1000; // minute
 
 function App() {
   const [leaderboard, setLeaderboard] = useState<null | {
-    id: number;
+    id: string;
     deadline: string;
   }>(null);
-  const [screen, setScreen] = useState<SCREENS>(SCREENS.REGISTRATION);
+  const [screen, setScreen] = useState<SCREENS>(SCREENS.MAIN);
   const handleScreenChange = (_screen: SCREENS) => setScreen(_screen);
   const [gameLoopId, setGameLoopId] = useState<NodeJS.Timeout | null>(null);
   const [tickId, setTickId] = useState(0);
@@ -114,7 +114,7 @@ function App() {
     }
   }, []);
 
-  const handleLeaderboard = (props: { id: number; deadline: string }) => {
+  const handleLeaderboard = (props: { id: string; deadline: string }) => {
     setLeaderboard(props);
     document.removeEventListener("keydown", handleKeyDown);
     setScreen(SCREENS.LEADERBOARD);
@@ -153,7 +153,9 @@ function App() {
       {screen === SCREENS.MAIN ? (
         <MainScreen onScreenChange={handleScreenChange} />
       ) : null}
-      {screen === SCREENS.REGISTRATION ? <Registration /> : null}
+      {screen === SCREENS.REGISTRATION ? (
+        <Registration onScreenChange={handleScreenChange} />
+      ) : null}
       {screen === SCREENS.GAME ? (
         <GameScreen
           FPS={FPS}
@@ -163,11 +165,11 @@ function App() {
           onLeaderboard={handleLeaderboard}
         />
       ) : null}
-      {screen === SCREENS.LEADERBOARD && leaderboard ? (
+      {screen === SCREENS.LEADERBOARD ? (
         <Leaderboard
           {...leaderboard}
           onHome={() => {
-            setLeaderboard(null);
+            handleScreenChange(SCREENS.MAIN);
           }}
         />
       ) : null}

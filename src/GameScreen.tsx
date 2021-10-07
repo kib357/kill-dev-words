@@ -5,7 +5,7 @@ import { keyframes } from "@emotion/react";
 import { css } from "@emotion/css";
 import DesktopCanvas from "./DesktopCanvas";
 
-type IOnLeaderboard = { id: number; deadline: string };
+type IOnLeaderboard = { id: string; deadline: string };
 
 function GameScreen(props: {
   state: IGameState | null;
@@ -87,6 +87,7 @@ function GameScreen(props: {
           contact: localStorage.getItem("contact") || "",
         };
         // update previous results
+        // TODO save copy to FIREBASE
         if (leaderboardData.find(({ id: _id }) => _id === playerId)) {
           leaderboardData = leaderboardData.map((data) => {
             if (data.score < state.score) {
