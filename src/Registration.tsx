@@ -11,10 +11,9 @@ function Registration({ onScreenChange }: IRegistration) {
     "REGISTRATION",
     "HOW-TO",
   }
+  const isPractice = localStorage.getItem("skip-registration");
   const [step, setStep] = useState(
-    localStorage.getItem("skip-registration")
-      ? STEPS["HOW-TO"]
-      : STEPS.REGISTRATION
+    isPractice ? STEPS["HOW-TO"] : STEPS.REGISTRATION
   );
   const [name, setName] = useState("");
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) =>
@@ -47,9 +46,13 @@ function Registration({ onScreenChange }: IRegistration) {
   useEffect(() => {
     let timeout: NodeJS.Timeout;
     if (step === STEPS["HOW-TO"]) {
+      // timeout = setTimeout(() => {
+      //   onScreenChange(SCREENS.GAME);
+      // }, 15 * 1000);
+
       timeout = setTimeout(() => {
         onScreenChange(SCREENS.GAME);
-      }, 15 * 1000);
+      }, 9 * 1000);
     }
 
     return () => {
@@ -112,11 +115,14 @@ function Registration({ onScreenChange }: IRegistration) {
           <div className="rules eightBit">
             <h1>ПРАВИЛА</h1>
             <p>печатайте, чтобы выбивать слова</p>
-            <p>
+            {/* <p>
               нажимайте как можно чаще по пробелу, чтобы закрыть всплывающее
               окно
+            </p> */}
+            <p>
+              у вас есть {isPractice ? "30 секунд" : "2 минуты"}, чтобы
+              разобраться со всеми словами
             </p>
-            <p>у вас есть 2 минуты, чтобы разобраться со всеми словами</p>
           </div>
           <div
             data-progress="20%"

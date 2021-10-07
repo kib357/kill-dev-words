@@ -2,6 +2,9 @@
 
 ### TODO
 
+- SCORE show actual, not maximum
+- SCORE BUG maximum rewrites for all users
+
 - main screen layout
 - register and howto screens layout
 - add animation on key press

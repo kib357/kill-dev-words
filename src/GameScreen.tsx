@@ -5,7 +5,7 @@ import { keyframes } from "@emotion/react";
 import { css } from "@emotion/css";
 import DesktopCanvas from "./DesktopCanvas";
 
-type IOnLeaderboard = { id: string; deadline: string };
+type IOnLeaderboard = { id?: string; deadline: string; score?: number };
 
 function GameScreen(props: {
   state: IGameState | null;
@@ -17,7 +17,7 @@ function GameScreen(props: {
   const playerId =
     localStorage.getItem("player-id") ||
     String(Math.floor(Math.random() * 100000));
-  const playerName = localStorage.getItem("player") || "Name";
+  const playerName = localStorage.getItem("player");
   const [isScoreScreen, setScoreScreen] = React.useState(false);
   const { state, tickId, duration, FPS, onLeaderboard } = props;
   const Words = React.useMemo(() => {
@@ -73,6 +73,16 @@ function GameScreen(props: {
     if (state?.state === GAME_STATE.SCORE) {
       timeoutId = setTimeout(() => {
         setScoreScreen(true);
+
+        if (!playerName) {
+          timeoutLeaderboardId = setTimeout(() => {
+            onLeaderboard({
+              deadline: deadlineValue,
+              score: state.score,
+            });
+          }, 1500);
+          return;
+        }
 
         let leaderboardData: {
           id: string;

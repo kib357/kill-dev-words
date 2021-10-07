@@ -4,7 +4,6 @@ import Game, { GAME_STATE, IGameState, SCREENS } from "./Game";
 import confetti, { shape } from "canvas-confetti";
 import GameScreen from "./GameScreen";
 import { IWordObject } from "./Word";
-import DesktopMiniSrc from "./desktop-mini.png";
 import Leaderboard from "./Leaderboard";
 import MainScreen from "./MainScreen";
 import Registration from "./Registration";
@@ -83,60 +82,82 @@ const FPS = 30;
 
 const WORDS = Lib();
 
-// const DURATION = 30 * 1000;
+const DURATION_PRACTICE = 30 * 1000;
 const DURATION = 2 * 60 * 1000; // minute
 // const DURATION = 1000;
 
 function App() {
   const [leaderboard, setLeaderboard] = useState<null | {
-    id: string;
-    deadline: string;
+    id?: string;
+    deadline?: string;
+    score?: number;
   }>(null);
+  const [duration, setDuration] = useState(DURATION);
   const [screen, setScreen] = useState<SCREENS>(SCREENS.MAIN);
   const handleScreenChange = (_screen: SCREENS) => setScreen(_screen);
   const [gameLoopId, setGameLoopId] = useState<NodeJS.Timeout | null>(null);
   const [tickId, setTickId] = useState(0);
   const [state, setState] = useState<IGameState | null>(null);
-  const game = React.useMemo(
-    () => Game({ WORDS, PLAYER_OFFSET, duration: DURATION }),
-    []
-  );
-  const handleKeyDown = React.useCallback(({ key, code }: KeyboardEvent) => {
-    const state = game.getState().state;
+  let [game, setGame] = useState<any | null>(null);
+  const handleKeyDown = React.useCallback(
+    ({ key, code }: KeyboardEvent) => {
+      const state = game?.getState().state;
 
-    if (state === GAME_STATE.PLAY) {
-      const word = game.onKeydown({ key, code });
-      if (word) {
-        word.isKilled() && shootConfetti(word);
-      } else {
-        console.log("miss");
+      if (state === GAME_STATE.PLAY) {
+        const word = game?.onKeydown({ key, code });
+        if (word) {
+          word.isKilled() && shootConfetti(word);
+        } else {
+          console.log("miss");
+        }
       }
-    }
-  }, []);
+    },
+    [game]
+  );
 
-  const handleLeaderboard = (props: { id: string; deadline: string }) => {
+  const handleLeaderboard = (props: {
+    id?: string;
+    score?: number;
+    deadline?: string;
+  }) => {
     setLeaderboard(props);
     document.removeEventListener("keydown", handleKeyDown);
+    game = null;
     setScreen(SCREENS.LEADERBOARD);
   };
 
   useEffect(() => {
-    document.addEventListener("keydown", handleKeyDown);
-    const tick = () => {
-      game.tick();
-      setState(game.getState());
-      setTickId(Date.now());
-    };
+    if (screen === SCREENS.GAME) {
+      if (localStorage.getItem("skip-registration")) {
+        setDuration(DURATION_PRACTICE);
+        setGame(Game({ WORDS, PLAYER_OFFSET, duration: DURATION_PRACTICE }));
+      } else {
+        setDuration(DURATION);
+        setGame(Game({ WORDS, PLAYER_OFFSET, duration: DURATION }));
+      }
+    }
+  }, [screen]);
 
-    tick();
-    const interval = setInterval(tick, 1000 / FPS);
-    setGameLoopId(interval);
+  useEffect(() => {
+    let interval: any;
+    if (game) {
+      document.addEventListener("keydown", handleKeyDown);
+      const tick = () => {
+        game.tick();
+        setState(game.getState());
+        setTickId(Date.now());
+      };
+
+      tick();
+      interval = setInterval(tick, 1000 / FPS);
+      setGameLoopId(interval);
+    }
 
     return () => {
       clearInterval(interval);
       document.removeEventListener("keydown", handleKeyDown);
     };
-  }, []);
+  }, [game]);
 
   useEffect(() => {
     if (state?.state === GAME_STATE.SCORE) {
@@ -151,7 +172,10 @@ function App() {
   return (
     <div className="App">
       {screen === SCREENS.MAIN ? (
-        <MainScreen onScreenChange={handleScreenChange} />
+        <MainScreen
+          onLeaderboard={handleLeaderboard}
+          onScreenChange={handleScreenChange}
+        />
       ) : null}
       {screen === SCREENS.REGISTRATION ? (
         <Registration onScreenChange={handleScreenChange} />
@@ -159,7 +183,7 @@ function App() {
       {screen === SCREENS.GAME ? (
         <GameScreen
           FPS={FPS}
-          duration={DURATION}
+          duration={duration}
           tickId={tickId}
           state={state}
           onLeaderboard={handleLeaderboard}

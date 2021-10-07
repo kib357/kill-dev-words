@@ -4,6 +4,7 @@ import { formatScore } from "./GameScreen";
 interface ILeaderboard {
   id?: string;
   deadline?: string;
+  score?: number;
   onHome: () => void;
 }
 
@@ -13,14 +14,14 @@ interface IData {
   score: number;
 }
 
-function Leaderboard({ id, deadline, onHome }: ILeaderboard) {
+function Leaderboard({ id, deadline, onHome, score }: ILeaderboard) {
   const [showBtn, setBtn] = useState(false);
   const [data] = useState<IData[]>(
     JSON.parse(localStorage.getItem("leaderboard") || "[]").sort(
       (a: any, b: any) => b.score - a.score
     )
   );
-  const score = data.find(({ id: _id }) => _id === id)?.score || 0;
+  const _score = data.find(({ id: _id }) => _id === id)?.score || 0;
 
   const keydownTimestamp = Date.now();
   const handleKeyDown = React.useCallback((e: KeyboardEvent) => {
@@ -38,6 +39,8 @@ function Leaderboard({ id, deadline, onHome }: ILeaderboard) {
 
     const WAIT = 4000;
     let timeout = setTimeout(() => {
+      if (!id) return;
+
       document
         ?.getElementById("you")
         ?.scrollIntoView({ block: "center", behavior: "smooth" });
@@ -64,10 +67,12 @@ function Leaderboard({ id, deadline, onHome }: ILeaderboard) {
           </span>
         </div>
       ) : null}
-      {score ? (
+      {score || _score ? (
         <div className="score">
           <span className="outlined">SCORE</span>
-          <span style={{ marginLeft: "1.9em" }}>{formatScore(score)}</span>
+          <span style={{ marginLeft: "1.9em" }}>
+            {formatScore(score || _score)}
+          </span>
         </div>
       ) : null}
       <div className="board">
