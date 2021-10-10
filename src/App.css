@@ -507,8 +507,7 @@
   background-color: black;
 }
 
-.inverted-bar:before,
-.inverted-bar:after {
+.inverted-bar:before {
   text-align: center;
   height: 66px;
   line-height: 66px;
@@ -516,18 +515,29 @@
   white-space: nowrap;
   overflow: hidden;
   content: attr(data-content);
+  animation: loading 2.5s steps(4) infinite both;
+}
+
+@keyframes loading {
+  0% {
+    content: "Loading";
+  }
+
+  33% {
+    content: "Loading.";
+  }
+
+  66% {
+    content: "Loading..";
+  }
+
+  100% {
+    content: "Loading...";
+  }
 }
 
 .inverted-bar:before {
   color: white;
   width: 100%;
   z-index: 1;
-}
-
-.inverted-bar:after {
-  background-color: white;
-  color: black;
-  content: "";
-  width: attr(data-progress);
-  /* width: 20%; */
 }
