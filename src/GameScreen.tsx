@@ -4,6 +4,7 @@ import NumberEasing from "react-number-easing";
 import { keyframes } from "@emotion/react";
 import { css } from "@emotion/css";
 import DesktopCanvas from "./DesktopCanvas";
+import Backup from "./Backup";
 
 type IOnLeaderboard = { id?: string; deadline: string; score?: number };
 
@@ -96,6 +97,7 @@ function GameScreen(props: {
           score: state.score,
           contact: localStorage.getItem("contact") || "",
         };
+        Backup({ ...data, duration: state.game_duration });
         // update previous results
         // TODO save copy to FIREBASE
         const isCurrentPlayer = (_id: string) => _id === playerId;

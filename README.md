@@ -2,15 +2,13 @@
 
 ### TODO
 
+- save data to firebase (backup)
+- animation on LOADING... (how to screen)
 
-
-- main screen layout
-- register and howto screens layout
 - add animation on key press
 - add start game countdown (3 - 2 - 1)
 - support noisy banners gameplay
 - leaderboard screen layout with controls (up, down)
-- detect why words rerenders???
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 

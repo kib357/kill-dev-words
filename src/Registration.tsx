@@ -32,7 +32,8 @@ function Registration({ onScreenChange }: IRegistration) {
     }[] = JSON.parse(localStorage.getItem("leaderboard") || "[]");
     const prevResults = leaderboardData.find(
       ({ name: _name, contact: _contact }) =>
-        _name === name && _contact === contact
+        _name?.toLowerCase() === name?.toLowerCase() &&
+        _contact?.toLowerCase() === contact?.toLowerCase()
     );
     localStorage.setItem(
       "player-id",
@@ -75,7 +76,7 @@ function Registration({ onScreenChange }: IRegistration) {
               <input
                 type="text"
                 name="player"
-                autoComplete="chrome-off"
+                autoComplete="off"
                 className="eightBit"
                 id="player"
                 value={name}
@@ -89,7 +90,7 @@ function Registration({ onScreenChange }: IRegistration) {
               <input
                 type="text"
                 name="contact"
-                autoComplete="chrome-off"
+                autoComplete="off"
                 id="contact"
                 className="eightBit"
                 value={contact}

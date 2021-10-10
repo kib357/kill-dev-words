@@ -15,6 +15,7 @@
     "@types/react-dom": "^17.0.0",
     "animated-number-react": "^0.1.2",
     "canvas-confetti": "^1.4.0",
+    "firebase": "^9.1.2",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-number-easing": "^1.0.1",
