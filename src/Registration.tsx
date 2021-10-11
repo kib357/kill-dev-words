@@ -61,8 +61,12 @@ function Registration({ onScreenChange }: IRegistration) {
     };
   }, [step]);
 
+  const handleEnter = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter") handleToHowTo();
+  };
+
   return (
-    <div className="registration">
+    <div className="registration" onKeyDown={handleEnter}>
       <DesktopCanvas />
       <div className="logo"></div>
       {step === STEPS.REGISTRATION ? (
@@ -77,6 +81,7 @@ function Registration({ onScreenChange }: IRegistration) {
                 type="text"
                 name="player"
                 autoComplete="off"
+                autoFocus
                 className="eightBit"
                 id="player"
                 value={name}

@@ -33,6 +33,25 @@ function MainScreen({ onScreenChange, onLeaderboard }: IMainScreen) {
       onLeaderboard({});
     }
   };
+  React.useEffect(() => {
+    const handleKeyDown = (e: { key: string }) => {
+      switch (e.key) {
+        case "ArrowDown":
+          setActiveMenu(activeMenu === 2 ? 0 : activeMenu + 1);
+          break;
+        case "ArrowUp":
+          setActiveMenu(activeMenu === 0 ? 2 : activeMenu - 1);
+          break;
+        case "Enter":
+          handleClick();
+          break;
+      }
+    };
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [setActiveMenu, handleClick, activeMenu]);
 
   return (
     <div
